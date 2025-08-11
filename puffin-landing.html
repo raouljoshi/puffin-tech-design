@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puffin – Teacher talks, AI writes | Voice to formative feedback</title>
+  <meta name="description" content="Turn teacher voice reflections into structured, age-appropriate feedback. Short-cycle notes, assignment reviews, and development memos. GDPR-first." />
+  <meta property="og:title" content="Puffin – Teacher talks, AI writes" />
+  <meta property="og:description" content="Turn teacher voice reflections into structured, age-appropriate feedback." />
+  <meta property="og:image" content="logo-light.png" />
+  <meta name="theme-color" content="#1F4E79" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Page-specific utilities (kept small; core styles in styles.css) */
+    .sticky-header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--surface) 92%, transparent); }
+    .nav { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:0.75rem 1rem; }
+    .nav-left { display:flex; align-items:center; gap:0.75rem; }
+    .nav-right { display:flex; align-items:center; gap:0.5rem; }
+    .brand-logo-small { height: 36px; width:auto; display:block; }
+    .trust-chips { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-top:1rem; }
+    .chip { border:1px solid var(--border); background: var(--surface); border-radius:2rem; padding:0.35rem 0.75rem; font-size:0.875rem; color:var(--muted); }
+    .section { padding: 3rem 1rem; }
+    .section .container { max-width: 1100px; margin: 0 auto; }
+    .section-title { text-align:center; margin-bottom: 1rem; }
+    .section-subtitle { text-align:center; color:var(--tertiary); max-width:70ch; margin: 0.5rem auto 2rem; }
+    .hero { padding: 5rem 1rem 3rem; text-align:center; background: linear-gradient(135deg, rgba(31,78,121,0.06) 0%, rgba(232,119,34,0.06) 100%); }
+    .hero h1 { font-size: 3rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 1.125rem; color: var(--tertiary); max-width: 75ch; margin: 0.75rem auto 1.5rem; }
+    .hero-ctas { display:flex; flex-wrap:wrap; gap:0.75rem; justify-content:center; }
+    .media-frame { border:1px dashed var(--border); background: var(--background); border-radius: 1rem; padding: 1rem; margin-top: 1.25rem; }
+    .media-placeholder { height: 260px; display:grid; place-items:center; color: var(--tertiary); font-size:0.95rem; }
+    .two-col { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 2rem; align-items:center; }
+    .three-col { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.25rem; }
+    .quote { border-left: 4px solid var(--primary); padding: 1rem 1rem 1rem 1.25rem; background: var(--surface); border-radius: 0.5rem; }
+    .quote .quote-text { font-size: 1.1rem; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:0.85rem; background: var(--surface); border: 1px solid var(--border); border-bottom-width: 3px; padding: 0.1rem 0.4rem; border-radius: 0.35rem; }
+    .faq { border:1px solid var(--border); border-radius: 0.75rem; overflow:hidden; }
+    .faq details { border-top:1px solid var(--border); background: var(--surface); }
+    .faq details:first-child { border-top: 0; }
+    .faq summary { cursor:pointer; padding: 1rem 1.25rem; font-weight:600; }
+    .faq .answer { padding: 0 1.25rem 1rem; color: var(--muted); }
+    .badges { display:flex; gap:0.5rem; flex-wrap:wrap; }
+    .badge-soft { font-size:0.8rem; padding: 0.35rem 0.6rem; border-radius: 0.4rem; background: rgba(31,78,121,0.1); color: var(--primary); border: 1px solid var(--primary); }
+    .stats { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:1rem; margin-top:1rem; }
+    .stat { text-align:center; padding:1.25rem; border:1px solid var(--border); border-radius:1rem; background: var(--surface); }
+    .stat .num { font-weight:700; font-size:2rem; color: var(--primary); display:block; }
+    .card { height: 100%; }
+    .footer { background: var(--surface); border-top:1px solid var(--border); padding: 2.5rem 0; }
+    .footer-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:1.5rem; }
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.25rem; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Puffin",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "description": "Turn teacher voice reflections into structured, age-appropriate formative feedback.",
+    "url": "https://example.com",
+    "image": "logo-light.png"
+  }
+  </script>
+</head>
+<body>
+  <!-- Sticky Header -->
+  <header class="sticky-header" role="banner">
+    <div class="container nav" aria-label="Primary">
+      <div class="nav-left">
+        <img src="logo-light.png" alt="Puffin logo" class="brand-logo-small logo-light" />
+        <img src="logo-dark.png" alt="Puffin logo dark" class="brand-logo-small logo-dark" style="display:none;" />
+        <strong>Puffin</strong>
+      </div>
+      <nav class="nav-right" aria-label="Site">
+        <a href="#how" class="btn btn-outline-primary btn-sm">How it works</a>
+        <a href="#privacy" class="btn btn-outline-primary btn-sm">Privacy</a>
+        <a href="#faq" class="btn btn-outline-primary btn-sm">FAQ</a>
+        <a href="#demo" class="btn btn-primary btn-sm">Get the demo</a>
+        <button id="themeToggle" class="btn btn-secondary btn-sm" aria-label="Toggle theme">🌙 Dark Mode</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <h1>Teacher talks, AI writes.</h1>
+      <p>Turn natural voice reflections into structured, motivating feedback—without new workflows. Capture short‑cycle notes, assignment feedback, and termly development memos in minutes.</p>
+      <div class="hero-ctas">
+        <a href="#demo" class="btn btn-primary btn-lg" aria-label="Watch a 2-minute demo">Get the demo (2 min)</a>
+        <a href="#pilot" class="btn btn-outline-primary btn-lg" aria-label="Join the pilot for leaders">Join the pilot (leaders)</a>
+        <a href="#try" class="btn btn-outline-primary btn-lg" aria-label="Try it for my class">Try it for my class</a>
+      </div>
+      <div class="trust-chips" aria-label="Trust & integrations">
+        <span class="chip">GDPR-first</span>
+        <span class="chip">No audio stored</span>
+        <span class="chip">Teacher-in-control drafts</span>
+        <span class="chip">Exports to Unikum • Prorenata • Infomentor</span>
+      </div>
+      <div class="media-frame" aria-label="Product preview">
+        <div class="media-placeholder" role="img" aria-label="Animation: tap-to-record → transcript streaming → structured output preview">
+          Placeholder: short loop/video of tap → transcript → structured output
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -> Better Way -->
+  <section class="section" id="problem">
+    <div class="container two-col">
+      <div class="card">
+        <h2 class="section-title">Running faster is not the goal—running in the right direction is.</h2>
+        <p>Today, insights live in teachers’ heads or get lost in paperwork; development talks are infrequent; daily feedback is inconsistent or undocumented.</p>
+        <p><strong>Puffin:</strong> captures it when it’s fresh, then structures it with research‑backed patterns—efficiency + effectiveness.</p>
+        <div class="stats">
+          <div class="stat"><span class="num">⏱️ 3–5</span><span class="label">Minutes to draft</span></div>
+          <div class="stat"><span class="num">~85%</span><span class="label">Accepted with minimal edits</span></div>
+          <div class="stat"><span class="num">120+</span><span class="label">Weekly active teachers (pilot)</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>“Capture it when it’s fresh.”</h3>
+        <p class="text-sm" style="color:var(--muted);">Short‑cycle, immediate observations become actionable when structured quickly.</p>
+        <div class="quote" style="margin-top:1rem;">
+          <p class="quote-text">“Teachers should be selective—Puffin helps document the key observations that matter.”</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How Puffin Works -->
+  <section class="section" id="how">
+    <div class="container">
+      <h2 class="section-title">How Puffin Works</h2>
+      <p class="section-subtitle">Scaffolding voice input with AI → transcribe + structure + summarize into actionable feedback.</p>
+      <div class="three-col">
+        <div class="card">
+          <h3>1 — Record</h3>
+          <p>One‑tap, speak naturally. Switch purpose mid‑record (Assessment / Notes / Developmental reviews).</p>
+        </div>
+        <div class="card">
+          <h3>2 — Review</h3>
+          <p>Add first name, grade level, language. Confirm → Generate draft. <span class="kbd">Cancel = hard delete</span>.</p>
+        </div>
+        <div class="card">
+          <h3>3 — Receive</h3>
+          <p>Age‑appropriate, purpose‑specific drafts in minutes. Copy, edit, or export.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Can Create -->
+  <section class="section" id="buckets">
+    <div class="container">
+      <h2 class="section-title">What You Can Create</h2>
+      <p class="section-subtitle">Three purpose‑built outputs. Use placeholder screenshots below.</p>
+      <div class="three-col">
+        <div class="card">
+          <h3>Assessments</h3>
+          <ul>
+            <li>Criteria‑linked strengths, improvements, next steps</li>
+            <li>Teacher’s voice preserved</li>
+          </ul>
+          <div class="media-placeholder" aria-label="Sample screenshot placeholder">Assignment feedback screenshot</div>
+        </div>
+        <div class="card">
+          <h3>Notes</h3>
+          <ul>
+            <li>Summary of recent observations (academic + SEL)</li>
+            <li>Optional early‑warning flags</li>
+            <li><em>“Capture it when it’s fresh.”</em></li>
+          </ul>
+          <div class="media-placeholder" aria-label="Sample screenshot placeholder">Short‑cycle notes screenshot</div>
+        </div>
+        <div class="card">
+          <h3>Developmental reviews</h3>
+          <ul>
+            <li>Strength‑based memo + subject reviews</li>
+            <li>Optional appendix for extra examples</li>
+          </ul>
+          <div class="media-placeholder" aria-label="Sample screenshot placeholder">Development memo screenshot</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Evidence & Design Philosophy -->
+  <section class="section" id="evidence">
+    <div class="container two-col">
+      <div>
+        <h2 class="section-title">Feedback that’s both useful and usable</h2>
+        <ul>
+          <li>Research places feedback among the highest‑impact practices when it is timely, specific, and actionable.</li>
+          <li>Scaffolding voice with AI ensures tone stays human while structure stays clear.</li>
+          <li>Wiliam’s principle: good feedback leads to self‑regulation → we nudge student agency over time.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="badges" style="margin-bottom:0.75rem;">
+          <span class="badge-soft">“Work smarter, not harder.”</span>
+          <span class="badge-soft">“Good feedback works towards its own redundancy.”</span>
+        </div>
+        <blockquote class="quote">
+          <p class="quote-text">Dylan Wiliam: “Good feedback works towards its own redundancy.”</p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits by Stakeholder -->
+  <section class="section" id="benefits">
+    <div class="container three-col">
+      <div class="card">
+        <h3>Teachers</h3>
+        <ul>
+          <li>Hours saved, consistent quality</li>
+          <li>Fewer after‑hours admin tasks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>School leaders</h3>
+        <ul>
+          <li>Cross‑class consistency, better prep for talks</li>
+          <li>Privacy‑by‑design, early signals</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Parents & students</h3>
+        <ul>
+          <li>Clear, motivating guidance</li>
+          <li>Right tone and reading/listening level</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Privacy & Responsible AI -->
+  <section class="section" id="privacy">
+    <div class="container two-col">
+      <div class="card">
+        <h2 class="section-title">Privacy & Responsible AI</h2>
+        <ul>
+          <li><strong>GDPR‑first:</strong> No audio or identifiers stored by default; cancel = delete.</li>
+          <li><strong>Human‑in‑the‑loop:</strong> Outputs are drafts for teacher approval; teachers stay in control.</li>
+          <li><strong>Data minimization:</strong> First name, grade band, language; retention only if the school opts in.</li>
+          <li><strong>Integrations (opt‑in):</strong> Export to existing platforms; integrations added if schools want them.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Compliance microcopy</h3>
+        <p>Your audio is processed to produce a draft. We don’t store audio unless your school opts in. <span class="kbd">Cancel = delete</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- See It in Action (Demo) -->
+  <section class="section" id="demo">
+    <div class="container">
+      <h2 class="section-title">See It in Action</h2>
+      <p class="section-subtitle">Watch a 2‑minute walkthrough, then download sample outputs.</p>
+      <div class="media-frame">
+        <div class="media-placeholder" aria-label="Embedded demo video placeholder">Video placeholder (embed here)</div>
+      </div>
+      <div class="hero-ctas" style="margin-top:1rem;">
+        <a class="btn btn-outline-primary" href="#" aria-label="Download short-cycle note PDF">Download: Short‑cycle note (PDF)</a>
+        <a class="btn btn-outline-primary" href="#" aria-label="Download assignment feedback PDF">Download: Assignment feedback (PDF)</a>
+        <a class="btn btn-outline-primary" href="#" aria-label="Download development memo PDF">Download: Development memo (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="section" id="quickstart">
+    <div class="container three-col">
+      <div class="card">
+        <h3>1. Tap Record</h3>
+        <p>Speak naturally.</p>
+      </div>
+      <div class="card">
+        <h3>2. Confirm & Save + Analyze</h3>
+        <p>Add minimal details and generate draft.</p>
+      </div>
+      <div class="card">
+        <h3>3. Review, edit, export</h3>
+        <p>Copy into your system.</p>
+      </div>
+    </div>
+    <p class="section-subtitle">Tips: be specific, mix strengths & next steps, tag SEL when relevant.</p>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <h2 class="section-title">FAQs</h2>
+      <div class="faq" role="list">
+        <details>
+          <summary>Do you store audio?</summary>
+          <div class="answer">By default, no. Cancel = delete; confirm = analyze; retention only if school opts in.</div>
+        </details>
+        <details>
+          <summary>How do you handle languages?</summary>
+          <div class="answer">Output language selectable; tone and reading level adapt to grade band.</div>
+        </details>
+        <details>
+          <summary>Will this replace our talk workflow?</summary>
+          <div class="answer">No. Puffin plugs into your existing processes.</div>
+        </details>
+        <details>
+          <summary>Can we integrate with our LMS?</summary>
+          <div class="answer">Exports work today; we’ll integrate with systems you already use if the pilot is successful.</div>
+        </details>
+        <details>
+          <summary>What about student health workflows?</summary>
+          <div class="answer">Optional tagging/flags can support Elevhälsan without surveillance.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section" id="final-cta">
+    <div class="container">
+      <div class="card" style="text-align:center; padding:2rem; background: linear-gradient(135deg, rgba(31,78,121,0.08) 0%, rgba(232,119,34,0.08) 100%);">
+        <h2>Ready to try Puffin?</h2>
+        <p class="section-subtitle">Choose the path that fits you.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#" id="leaders-cta">Leaders: Book a 15‑min intro</a>
+          <a class="btn btn-outline-primary" href="#" id="teachers-cta">Teachers: Try a guided demo</a>
+          <a class="btn btn-outline-primary" href="#pilot" id="pilot-cta">Join the pilot</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <span aria-hidden="true">🐧</span>
+          <strong>Puffin</strong>
+        </div>
+        <p style="color: var(--tertiary);">Built with privacy in mind. Teacher‑in‑control drafts. Processing in region (EU).</p>
+        <div class="badges" style="margin-top:0.5rem;">
+          <span class="chip">Privacy</span>
+          <span class="chip">Security</span>
+          <span class="chip">Accessibility</span>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul style="list-style:none; margin-top:0.5rem;">
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Press kit</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul style="list-style:none; margin-top:0.5rem;">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul style="list-style:none; margin-top:0.5rem;">
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#demo">Demo</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" style="text-align:center; color:var(--tertiary); margin-top:1.5rem;">
+      © 2025 Puffin. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
