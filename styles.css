@@ -210,6 +210,30 @@ h6 { font-size: 1rem; }
     transform: translateY(-5px);
 }
 
+/* Lists inside cards: spacing and wrapping */
+.card ul,
+.card ol {
+    padding-left: 1.25rem; /* room for markers */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card li {
+    margin: 0.4rem 0; /* add vertical breathing room */
+    line-height: var(--line-relaxed);
+    overflow-wrap: anywhere; /* prevent overflow of long tokens */
+    word-break: break-word;
+}
+
+.card li::marker {
+    color: var(--tertiary);
+}
+
+/* Nested lists: slightly reduced spacing to keep hierarchy tight but readable */
+.card li ul,
+.card li ol { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+.card li li { margin: 0.25rem 0; }
+
 /* 6) Theme toggle (icon sizing helpers) ----------------------------------- */
 .theme-toggle {
     display: flex;
