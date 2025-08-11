@@ -46,7 +46,11 @@ body {
 }
 
 .brand { display: flex; align-items: center; gap: 1rem; }
-.brand-mark { font-size: 2rem; }
+.brand-mark { display: flex; align-items: center; }
+.brand-logo { height: 48px; width: auto; display: block; }
+.brand-logo.logo-dark { display: none; }
+[data-theme="dark"] .brand-logo.logo-light { display: none; }
+[data-theme="dark"] .brand-logo.logo-dark { display: block; }
 .brand-title { font-weight: 700; font-size: 1.5rem; color: var(--primary); }
 .brand-subtitle { color: var(--tertiary); font-size: 0.9rem; }
 .header-actions { display: flex; gap: 0.75rem; }
