@@ -450,6 +450,36 @@ input + .suffix { border-top-left-radius: 0; border-bottom-left-radius: 0; }
 .toast { position: fixed; right: 1rem; bottom: 1rem; background: var(--surface); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem 1rem; box-shadow: var(--shadow-md); display: none; }
 .toast.show { display: block; }
 
+/* 16) Quote block --------------------------------------------------------- */
+.quote {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.quote-text {
+  position: relative;
+  font-size: 1.125rem;
+  line-height: var(--line-relaxed);
+  color: var(--foreground);
+}
+
+.quote-text::before {
+  content: "\201C"; /* left double quotation mark */
+  color: var(--primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-right: 0.25rem;
+}
+
+.quote-author {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
 /* 14) Global Poppins enforcement ----------------------------------------- */
 *, *::before, *::after {
     font-family: 'Poppins', sans-serif;
