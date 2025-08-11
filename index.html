@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylesheet Demo - Light/Dark Mode</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle btn btn-secondary" id="themeToggle">
+        🌙 Dark Mode
+    </button>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header class="text-center mb-4">
+            <h1>Stylesheet Demo</h1>
+            <p>A beautiful design with Poppins font and custom color scheme</p>
+        </header>
+
+        <!-- Color Palette Display -->
+        <section class="mb-4">
+            <h2>Color Palette</h2>
+            <div class="color-palette">
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--primary);"></div>
+                    <span>Primary</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--secondary);"></div>
+                    <span>Secondary</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--tertiary);"></div>
+                    <span>Tertiary</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--danger);"></div>
+                    <span>Danger</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buttons Section -->
+        <section class="mb-4">
+            <h2>Button Styles</h2>
+            <div class="button-group">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-tertiary">Tertiary Button</button>
+                <button class="btn btn-danger">Danger Button</button>
+                <button class="btn btn-outline-primary">Outline Primary</button>
+            </div>
+        </section>
+
+        <!-- Cards Section -->
+        <section class="mb-4">
+            <h2>Card Components</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Feature Card</h3>
+                    <p>This is a sample card component showcasing the surface color and typography.</p>
+                    <button class="btn btn-primary">Learn More</button>
+                </div>
+                <div class="card">
+                    <h3>Another Card</h3>
+                    <p>Cards adapt beautifully to both light and dark themes with proper contrast.</p>
+                    <button class="btn btn-secondary">Get Started</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section class="mb-4">
+            <h2>Alert Components</h2>
+            <div class="alert alert-primary">
+                <strong>Info:</strong> This is a primary alert with important information.
+            </div>
+            <div class="alert alert-danger">
+                <strong>Warning:</strong> This is a danger alert for critical messages.
+            </div>
+        </section>
+
+        <!-- Typography Section -->
+        <section class="mb-4">
+            <h2>Typography</h2>
+            <h1>Heading 1 - Poppins Font</h1>
+            <h2>Heading 2 - Clean and Modern</h2>
+            <h3>Heading 3 - Perfect Hierarchy</h3>
+            <p>This is a paragraph demonstrating the beautiful Poppins font family. The text is readable and maintains excellent contrast in both light and dark modes.</p>
+            <p><a href="#">This is a link</a> that follows the color scheme and has hover effects.</p>
+        </section>
+
+        <!-- Form Elements -->
+        <section class="mb-4">
+            <h2>Form Elements</h2>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="4" placeholder="Enter your message"></textarea>
+            </div>
+            <button class="btn btn-primary">Submit Form</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

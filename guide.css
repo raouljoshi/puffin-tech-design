@@ -1,0 +1,326 @@
+/*
+ * Puffin Design Guide – Documentation Styles
+ * ------------------------------------------------------------
+ * Purpose: Layout and documentation-specific styles for the Puffin
+ *          Design Guide (header, sidebar, content, examples).
+ * Depends on: Core tokens and components from styles.css
+ *
+ * Table of Contents
+ *  1) Root layout variables
+ *  2) Header
+ *  3) Layout grid (sidebar + content)
+ *  4) Sidebar navigation
+ *  5) Content & sections
+ *  6) Code blocks & copy affordances
+ *  7) Footer
+ *  8) Grid helpers for the guide
+ *  9) Component showcase wrappers & example frames
+ * 10) Advanced component examples (hero, pricing, stats)
+ * 11) Responsive adjustments
+ */
+/* 1) Root layout variables ----------------------------------------------- */
+:root {
+  --header-height: 80px;
+  --sidebar-width: 280px;
+  --content-max-width: 1200px;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+/* 2) Header --------------------------------------------------------------- */
+.guide-header {
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.brand { display: flex; align-items: center; gap: 1rem; }
+.brand-mark { font-size: 2rem; }
+.brand-title { font-weight: 700; font-size: 1.5rem; color: var(--primary); }
+.brand-subtitle { color: var(--tertiary); font-size: 0.9rem; }
+.header-actions { display: flex; gap: 0.75rem; }
+
+/* 3) Layout grid (sidebar + content) ------------------------------------- */
+.guide-layout { 
+  display: grid; 
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.guide-sidebar {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+}
+
+/* 4) Sidebar navigation --------------------------------------------------- */
+.guide-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.guide-sidebar .nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: var(--text);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.guide-sidebar .nav-link:hover { 
+  background: rgba(31, 78, 121, 0.08);
+  transform: translateX(4px);
+}
+.guide-sidebar .nav-link.active { 
+  color: var(--primary); 
+  background: rgba(31, 78, 121, 0.12);
+  font-weight: 600;
+}
+
+/* 5) Content & sections --------------------------------------------------- */
+.guide-content { 
+  padding: 3rem 2rem;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.section { 
+  margin-bottom: 4rem;
+  scroll-margin-top: calc(var(--header-height) + 2rem);
+}
+
+.lede { 
+  color: var(--tertiary); 
+  font-size: 1.125rem;
+  max-width: 65ch;
+  margin: 1rem 0 2rem 0;
+}
+
+/* Cards inside guide */
+.section .card { margin-top: 1rem; }
+
+/* 6) Code blocks & copy affordances -------------------------------------- */
+.code {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow: auto;
+  border: 1px solid #111827;
+}
+
+.card > .code,
+.card pre.code { 
+  margin-top: 0.75rem; /* breathing room from preceding component content */
+}
+
+.example-code { 
+  margin: 0; 
+  border-top: 1px solid var(--border); /* visual separation from meta */
+}
+
+.copy-code { margin-top: 0.5rem; }
+
+/* Type scale */
+.type-scale > div { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.type-scale > p { margin-top: 0.75rem; }
+
+/* 7) Footer --------------------------------------------------------------- */
+.guide-footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--tertiary);
+}
+
+/* 8) Grid helpers for the guide ------------------------------------------ */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* 9) Component showcase wrappers & example frames ------------------------ */
+.component-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin: 2rem 0;
+}
+
+.example-frame {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--background);
+}
+
+.example-preview {
+  padding: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.example-code {
+  background: #0f172a;
+  padding: 1rem;
+}
+
+.example-meta {
+  padding: 1rem;
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between; /* fix: valid value */
+  align-items: center;
+}
+
+/* 10) Advanced Components ------------------------------------------------- */
+.hero-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, rgba(31, 78, 121, 0.05) 0%, rgba(232, 119, 34, 0.05) 100%);
+  border-radius: 1rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--tertiary);
+  margin-bottom: 2rem;
+  max-width: 60ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.pricing-card.featured {
+  border-color: var(--primary);
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(31, 78, 121, 0.15);
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.price {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 1rem 0;
+}
+
+.price-period {
+  font-size: 1rem;
+  color: var(--tertiary);
+  font-weight: 400;
+}
+
+.feature-list {
+  list-style: none;
+  margin: 2rem 0;
+}
+
+.feature-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.feature-list li:last-child {
+  border-bottom: none;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+}
+
+.stat-label {
+  color: var(--tertiary);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* 11) Responsive adjustments --------------------------------------------- */
+@media (max-width: 900px) {
+  :root { --sidebar-width: 240px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .hero-title { font-size: 2.5rem; }
+}
+
+@media (max-width: 700px) {
+  .guide-layout { grid-template-columns: 1fr; }
+  .guide-sidebar { display: none; }
+  .guide-header { padding: 0 1rem; }
+  .guide-content { padding: 2rem 1rem; }
+  .hero-title { font-size: 2rem; }
+  .pricing-card.featured { transform: none; }
+}

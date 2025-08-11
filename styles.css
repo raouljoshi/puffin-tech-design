@@ -1,0 +1,456 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/*
+ * Puffin Design System – Core Stylesheet
+ * ------------------------------------------------------------
+ * Purpose: Defines tokens, base styles, components, utilities, and
+ *          responsive rules for the Puffin UI system.
+ * Brand:   Puffin (International EdTech)
+ * Font:    Poppins via Google Fonts
+ * Themes:  Light (default) / Dark (via [data-theme="dark"]) using CSS variables
+ *
+ * Table of Contents
+ *  1) Design Tokens (CSS variables)
+ *  2) Resets & Base
+ *  3) Typography
+ *  4) Buttons (solid + outline)
+ *  5) Cards
+ *  6) Theme Toggle (icon sizing helpers)
+ *  7) Forms
+ *  8) Links
+ *  9) Alerts
+ * 10) Animations
+ * 11) Responsive rules
+ * 12) Layout utilities (container, spacing, alignment)
+ * 13) Grid helpers & color swatches (demo utilities)
+ * 14) Global Poppins enforcement
+ *
+ * Notes
+ * - Keep behavioral changes minimal here; this file is relied upon by
+ *   the guide and example pages. Prefer documentation and organization.
+ * - Theme switching is handled in script.js by toggling [data-theme].
+ */
+
+/* 1) Design Tokens --------------------------------------------------------- */
+:root {
+    /* Light mode colors */
+    --primary: #1F4E79;
+    --secondary: #E87722;
+    --tertiary: #8B9CA7;
+    --danger: #E24A3B;
+    --background: #FFFFFF;
+    --text: #333333;
+    --surface: #F5F5F5;
+    --border: #E0E0E0;
+    /* Semantic roles */
+    --foreground: var(--text);
+    --muted: #6B7280; /* slate-500-ish */
+    --muted-foreground: #9CA3AF;
+    --accent: #0EA5E9; /* sky-500 */
+    --success: #10B981; /* emerald-500 */
+    --warning: #F59E0B; /* amber-500 */
+    --info: #3B82F6;    /* blue-500 */
+    --link: var(--primary);
+    --link-hover: var(--secondary);
+    --focus-ring: rgba(31, 78, 121, 0.35);
+    /* Typography scale */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --line-tight: 1.2;
+    --line-normal: 1.6;
+    --line-relaxed: 1.8;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    /* Spacing scale */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 2.5rem;
+    --space-8: 3rem;
+    /* Optional design scales (unused helpers, safe to extend) */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.10);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+/* Dark theme overrides activated via [data-theme="dark"] ------------------ */
+[data-theme="dark"] {
+    /* Dark mode colors */
+    --background: #121212;
+    --text: #FFFFFF;
+    --surface: #1E1E1E;
+    --border: #333333;
+    /* Semantic roles */
+    --foreground: var(--text);
+    --muted: #9CA3AF;
+    --muted-foreground: #A3A3A3;
+    --accent: #38BDF8; /* sky-400 */
+    --success: #34D399; /* emerald-400 */
+    --warning: #FBBF24; /* amber-400 */
+    --info: #60A5FA;    /* blue-400 */
+    --link: #7FB2D6; /* lighter link in dark */
+    --link-hover: #FF9A57; /* lighten secondary */
+    --focus-ring: rgba(127, 178, 214, 0.45);
+}
+
+/* Respect system preference when no explicit data-theme is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --background: #121212;
+    --text: #FFFFFF;
+    --surface: #1E1E1E;
+    --border: #333333;
+    --foreground: var(--text);
+    --muted: #9CA3AF;
+    --muted-foreground: #A3A3A3;
+    --link: #7FB2D6;
+    --link-hover: #FF9A57;
+    --focus-ring: rgba(127, 178, 214, 0.45);
+  }
+}
+
+/* 2) Resets & Base -------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 3) Typography ------------------------------------------------------------ */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+/* 4) Buttons (solid) ------------------------------------------------------ */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    color: white;
+}
+
+.btn-tertiary {
+    background-color: var(--tertiary);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* 4b) Buttons (outline variant) ------------------------------------------ */
+.btn-outline-primary {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background: rgba(31, 78, 121, 0.08);
+}
+
+/* 5) Cards ---------------------------------------------------------------- */
+.card {
+    background-color: var(--surface);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* 6) Theme toggle (icon sizing helpers) ----------------------------------- */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+/* 7) Forms ---------------------------------------------------------------- */
+input, textarea, select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background-color: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.1);
+}
+
+/* 8) Links ---------------------------------------------------------------- */
+a {
+    color: var(--link);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+/* 9) Alerts ---------------------------------------------------------------- */
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.alert-primary {
+    background-color: rgba(31, 78, 121, 0.1);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.alert-danger {
+    background-color: rgba(226, 74, 59, 0.1);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+/* 10) Animations ----------------------------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* 11) Responsive rules ----------------------------------------------------- */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 12) Layout utilities ----------------------------------------------------- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.mb-4 { margin-bottom: 1.5rem; }
+.text-center { text-align: center; }
+
+/* Common spacing utilities (subset; extend as needed) */
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+.pt-2 { padding-top: var(--space-2); }
+.pt-4 { padding-top: var(--space-4); }
+.px-2 { padding-left: var(--space-2); padding-right: var(--space-2); }
+.px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
+.py-2 { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+.py-4 { padding-top: var(--space-4); padding-bottom: var(--space-4); }
+
+/* 13) Grid helpers & Color swatches (demo utilities) ---------------------- */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.button-group, .stack {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Focus ring utility and focus-visible defaults */
+.focus-ring { box-shadow: 0 0 0 3px var(--focus-ring); outline: none; }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible { box-shadow: 0 0 0 3px var(--focus-ring); outline: none; }
+
+/* Color palette (demo) */
+.color-palette, .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.color-item, .swatch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+}
+
+.color-swatch, .swatch-color {
+    height: 64px;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.swatch-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.swatch .name { font-weight: 600; }
+.copy-token { padding: 0.35rem 0.5rem; border-radius: 0.4rem; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; }
+
+/* 13b) Forms (labels & groups) -------------------------------------------- */
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-family: 'Poppins', sans-serif; }
+
+/* Size variants */
+.btn-sm { padding: 0.5rem 0.875rem; font-size: var(--font-size-sm); border-radius: 0.375rem; }
+.btn-lg { padding: 1rem 1.75rem; font-size: var(--font-size-lg); border-radius: 0.625rem; }
+.input-sm { padding: 0.5rem 0.625rem !important; font-size: var(--font-size-sm) !important; }
+.input-lg { padding: 1rem 1.125rem !important; font-size: var(--font-size-lg) !important; }
+
+/* Typography utilities */
+.text-xs { font-size: var(--font-size-xs); line-height: var(--line-normal); }
+.text-sm { font-size: var(--font-size-sm); line-height: var(--line-normal); }
+.text-base { font-size: var(--font-size-base); line-height: var(--line-normal); }
+.text-lg { font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+.text-xl { font-size: var(--font-size-xl); line-height: var(--line-relaxed); }
+.text-2xl { font-size: var(--font-size-2xl); line-height: var(--line-relaxed); }
+
+/* 15) Application components --------------------------------------------- */
+/* Navbar */
+.navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.navbar .navbar-brand { font-weight: 700; color: var(--primary); font-size: var(--font-size-lg); }
+.navbar .navbar-links { display: flex; gap: var(--space-3); align-items: center; }
+.navbar .navbar-links a { color: var(--foreground); opacity: 0.9; }
+.navbar .navbar-links a:hover { color: var(--link-hover); }
+
+/* Badges */
+.badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 999px; font-size: var(--font-size-sm); font-weight: 600; border: 1px solid transparent; }
+.badge-primary { background: rgba(31,78,121,0.12); color: var(--primary); border-color: var(--primary); }
+.badge-success { background: rgba(16,185,129,0.12); color: var(--success); border-color: var(--success); }
+.badge-warning { background: rgba(245,158,11,0.12); color: var(--warning); border-color: var(--warning); }
+.badge-info { background: rgba(59,130,246,0.12); color: var(--info); border-color: var(--info); }
+
+/* Tables */
+.table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.table th, .table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); text-align: left; }
+.table thead th { background: rgba(31,78,121,0.06); color: var(--foreground); font-weight: 600; }
+.table tbody tr:hover { background: rgba(31,78,121,0.04); }
+
+/* Input states */
+.is-error { border-color: #F87171 !important; box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15) !important; }
+.is-success { border-color: var(--success) !important; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important; }
+.form-help { font-size: var(--font-size-sm); color: var(--muted); margin-top: 0.25rem; }
+.form-help.error { color: #F87171; }
+.form-help.success { color: var(--success); }
+
+/* Input group */
+.input-group { display: flex; align-items: stretch; width: 100%; }
+.input-group .prefix, .input-group .suffix {
+  display: inline-flex; align-items: center; padding: 0 0.75rem; background: var(--surface);
+  border: 1px solid var(--border); color: var(--muted); border-radius: 0.5rem; white-space: nowrap;
+}
+.input-group input { border-radius: 0.5rem; }
+.input-group .prefix { border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.input-group .suffix { border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.input-group .prefix + input { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+input + .suffix { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+/* Modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; }
+.modal-backdrop.show { display: flex; }
+.modal { background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-lg); width: min(600px, 92vw); box-shadow: var(--shadow-lg); }
+.modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 1rem 1.25rem; }
+.modal-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.5rem; }
+.modal-close { background: transparent; border: none; cursor: pointer; font-size: 1.25rem; line-height: 1; color: var(--muted); }
+
+/* Toast (simple) */
+.toast { position: fixed; right: 1rem; bottom: 1rem; background: var(--surface); color: var(--foreground); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem 1rem; box-shadow: var(--shadow-md); display: none; }
+.toast.show { display: block; }
+
+/* 14) Global Poppins enforcement ----------------------------------------- */
+*, *::before, *::after {
+    font-family: 'Poppins', sans-serif;
+}
