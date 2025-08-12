@@ -1,22 +1,24 @@
 /*
- * Puffin Design Guide – Documentation Styles
+ * Puffin Design Guide – Documentation & Landing Page Components
  * ------------------------------------------------------------
- * Purpose: Layout and documentation-specific styles for the Puffin
- *          Design Guide (header, sidebar, content, examples).
+ * Purpose: Documentation layout styles + extended landing page components
+ *          for the Puffin Design System.
  * Depends on: Core tokens and components from styles.css
  *
  * Table of Contents
  *  1) Root layout variables
- *  2) Header
- *  3) Layout grid (sidebar + content)
- *  4) Sidebar navigation
- *  5) Content & sections
- *  6) Code blocks & copy affordances
- *  7) Footer
- *  8) Grid helpers for the guide
- *  9) Component showcase wrappers & example frames
- * 10) Advanced component examples (hero, pricing, stats)
- * 11) Responsive adjustments
+ *  2) Documentation Layout (header, sidebar, content)
+ *  3) Code blocks & example frames
+ *  4) Advanced component examples (hero, pricing, stats)
+ *  5) Landing Page Components
+ *     - Hero components (gradient text, stats, trust indicators)
+ *     - Social proof (testimonials, inline stats)
+ *     - Process steps & visual elements
+ *     - Navigation & layout
+ *     - Interactive components (FAQ, mobile CTA)
+ *     - Content components (badges, kbd, quotes)
+ *     - Utility classes
+ *  6) Layout helpers & responsive adjustments
  */
 /* 1) Root layout variables ----------------------------------------------- */
 :root {
@@ -30,7 +32,11 @@ body {
   background: var(--background);
 }
 
-/* 2) Header --------------------------------------------------------------- */
+/* ========================================================================= */
+/* 2) DOCUMENTATION LAYOUT                                                  */
+/* ========================================================================= */
+
+/* 2.1) Header ------------------------------------------------------------- */
 .guide-header {
   position: sticky;
   top: 0;
@@ -313,11 +319,252 @@ body {
   margin-top: 0.5rem;
 }
 
+/* 10b) Landing page components ------------------------------------------- */
+/* ========================================================================= */
+/* 5) LANDING PAGE COMPONENTS                                               */
+/* ========================================================================= */
+
+/* 5.1) Hero Components ---------------------------------------------------- */
+
+.hero-gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Trust indicators */
+.trust-indicators {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  font-size: 0.875rem;
+  color: var(--tertiary);
+}
+
+/* Product preview mockup */
+.product-preview {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+
+.demo-screen {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.demo-header {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.demo-content p {
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.demo-arrow {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.demo-output {
+  background: rgba(31,78,121,0.05);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.demo-output h4 {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* Social proof section */
+.social-proof {
+  padding: 4rem 1rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.social-proof-intro {
+  text-align: center;
+  font-size: 1.125rem;
+  color: var(--tertiary);
+  margin-bottom: 3rem;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.testimonial {
+  background: var(--background);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.testimonial-text {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testimonial-author strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.testimonial-author span {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Inline stats (for social proof, etc.) */
+.inline-stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.inline-stat {
+  text-align: center;
+}
+
+.inline-stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.inline-stat-label {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Process steps */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.step-card {
+  text-align: center;
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.step-number {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.step-visual {
+  font-size: 3rem;
+  margin: 1rem 0;
+}
+
+.step-card h3 {
+  margin-bottom: 1rem;
+}
+
+/* Media frame for placeholders */
+.media-frame {
+  border: 1px dashed var(--border);
+  background: var(--background);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-top: 1.25rem;
+}
+
+.media-placeholder {
+  height: 260px;
+  display: grid;
+  place-items: center;
+  color: var(--tertiary);
+  font-size: 0.95rem;
+}
+
+/* Layout utilities */
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 2rem;
+  align-items: center;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 1.25rem;
+}
+
 /* 11) Responsive adjustments --------------------------------------------- */
 @media (max-width: 900px) {
   :root { --sidebar-width: 240px; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .hero-title { font-size: 2.5rem; }
+  .hero-stats { justify-content: center; }
+  .trust-indicators { justify-content: center; }
+  .process-steps { grid-template-columns: 1fr; gap: 2rem; }
+  .inline-stats { gap: 2rem; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 700px) {
@@ -327,4 +574,223 @@ body {
   .guide-content { padding: 2rem 1rem; }
   .hero-title { font-size: 2rem; }
   .pricing-card.featured { transform: none; }
+}
+
+/* 12) Additional Landing Page Components ----------------------------------- */
+
+/* FAQ Accordion Component */
+.faq {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.faq details {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.faq details:first-child {
+  border-top: 0;
+}
+
+.faq summary {
+  cursor: pointer;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: '+';
+  float: right;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.faq details[open] summary::after {
+  content: '−';
+}
+
+.faq .answer {
+  padding: 0 1.25rem 1rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Mobile CTA Bar */
+.mobile-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.6rem;
+  background: color-mix(in oklab, var(--surface) 95%, transparent);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  z-index: 60;
+}
+
+@media (max-width: 720px) {
+  .mobile-cta {
+    display: flex;
+  }
+}
+
+/* Sticky Header Navigation */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-logo-small {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+
+
+
+/* Badge Variants */
+.badge-soft {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.4rem;
+  background: rgba(31, 78, 121, 0.1);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.chip {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 2rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Keyboard Key Styling */
+.kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom-width: 3px;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Layout Components */
+.section {
+  padding: 3rem 1rem;
+}
+
+.section .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--tertiary);
+  max-width: 70ch;
+  margin: 0.5rem auto 2rem;
+  line-height: 1.6;
+}
+
+/* Footer Component */
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Utility Classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  z-index: 9999;
+}
+
+/* Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+.section[id],
+.hero[id] {
+  scroll-margin-top: 80px;
 }

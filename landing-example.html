@@ -8,24 +8,25 @@
     <link rel="stylesheet" href="guide.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="guide-header">
-        <div class="brand">
+    <!-- Header -->
+    <header class="site-header">
+        <div class="site-brand">
             <div class="brand-mark">
                 <img src="logo-light.png" alt="Puffin logo light" class="brand-logo logo-light" />
                 <img src="logo-dark.png" alt="Puffin logo dark" class="brand-logo logo-dark" />
             </div>
             <div class="brand-text">
                 <div class="brand-title">Puffin</div>
+                <div class="brand-subtitle">Design System</div>
             </div>
         </div>
-        <div class="header-actions">
-            <a href="#features" class="btn btn-outline-primary">Features</a>
-            <a href="#pricing" class="btn btn-outline-primary">Pricing</a>
+        <nav class="site-nav" aria-label="Primary">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#pricing" class="nav-link">Pricing</a>
             <button class="btn btn-primary">Get Started</button>
             <button class="theme-toggle btn btn-secondary" id="themeToggle">🌙 Dark Mode</button>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero-section" style="margin: 2rem; padding: 6rem 2rem;">
@@ -188,42 +189,45 @@
     </div>
 
     <!-- Footer -->
-    <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 0; margin-top: 4rem;">
-        <div class="container">
-            <div class="grid grid-4">
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-columns">
                 <div>
                     <div class="brand" style="margin-bottom: 1rem;">
-                        <div class="brand-mark">🐧</div>
+                        <div class="brand-mark">
+                            <img src="logo-light.png" alt="Puffin logo light" class="brand-logo logo-light" />
+                            <img src="logo-dark.png" alt="Puffin logo dark" class="brand-logo logo-dark" />
+                        </div>
                         <div class="brand-title">Puffin</div>
                     </div>
                     <p style="color: var(--tertiary);">Beautiful, accessible design systems for modern web applications.</p>
                 </div>
                 <div>
                     <h4>Product</h4>
-                    <ul style="list-style: none; margin-top: 1rem;">
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Components</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Templates</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Themes</a></li>
+                    <ul>
+                        <li><a href="#">Components</a></li>
+                        <li><a href="#">Templates</a></li>
+                        <li><a href="#">Themes</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Resources</h4>
-                    <ul style="list-style: none; margin-top: 1rem;">
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Documentation</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Examples</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Blog</a></li>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Examples</a></li>
+                        <li><a href="#">Blog</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Company</h4>
-                    <ul style="list-style: none; margin-top: 1rem;">
-                        <li style="margin-bottom: 0.5rem;"><a href="#">About</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Contact</a></li>
-                        <li style="margin-bottom: 0.5rem;"><a href="#">Support</a></li>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Support</a></li>
                     </ul>
                 </div>
             </div>
-            <div style="border-top: 1px solid var(--border); margin-top: 2rem; padding-top: 2rem; text-align: center; color: var(--tertiary);">
+            <div class="footer-bottom">
                 © 2024 Puffin Design System. All rights reserved.
             </div>
         </div>
