@@ -21,8 +21,8 @@
     </div>
     <div class="header-actions">
       <button class="btn btn-outline-primary" id="copyColorTokens">Copy Tokens</button>
-      <a class="btn btn-tertiary" href="landing-example.html" target="_blank" rel="noopener">Open Landing Page ↗</a>
-      <button class="theme-toggle btn btn-secondary" id="themeToggle">🌙 Dark Mode</button>
+      <a class="btn btn-tertiary" href="puffin-landing.html" target="_blank" rel="noopener">Puffin Landing Page ↗</a>
+      <a class="btn btn-tertiary" href="landing-example.html" target="_blank" rel="noopener">Example Landing ↗</a>
     </div>
   </header>
 
@@ -34,6 +34,7 @@
         <a href="#colors" class="nav-link">Colors</a>
         <a href="#typography" class="nav-link">Typography</a>
         <a href="#components" class="nav-link">Components</a>
+        <a href="#navigation" class="nav-link">Navigation & Headers</a>
         <a href="#examples" class="nav-link">Page Examples</a>
         <a href="#forms" class="nav-link">Forms</a>
         <a href="#accessibility" class="nav-link">Accessibility</a>
@@ -715,6 +716,142 @@
         </div>
       </section>
 
+      <!-- Navigation & Headers Section -->
+      <section id="navigation" class="section">
+        <div class="container">
+          <h2>Navigation & Headers</h2>
+          <p>Standardized navigation patterns and header components for consistent user experience across all Puffin pages.</p>
+
+          <!-- Standardized Site Header -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Standardized Site Header</h3>
+              <p>The production header pattern used across all Puffin pages (landing, privacy policy, login, etc.)</p>
+              
+              <header class="site-header" role="banner" style="position: relative; margin: 1rem 0;">
+                <div class="site-brand">
+                  <div class="brand-mark">
+                    <img src="logo-light.png" alt="Puffin logo light" class="brand-logo logo-light" />
+                    <img src="logo-dark.png" alt="Puffin logo dark" class="brand-logo logo-dark" />
+                  </div>
+                  <div class="brand-text">
+                    <div class="brand-title">Puffin</div>
+                    <div class="brand-subtitle">Teacher talks, AI writes</div>
+                  </div>
+                </div>
+                <nav class="site-nav" aria-label="Primary">
+                  <a href="puffin-landing.html" class="nav-link">Home</a>
+                  <a href="puffin-landing.html#how" class="nav-link">How it works</a>
+                  <a href="privacy-policy.html" class="nav-link">Privacy Policy</a>
+                  <a href="login.html" class="btn btn-primary">Try Puffin</a>
+                </nav>
+              </header>
+            </div>
+            <div class="example-meta">
+              <h4>Standardized Site Header</h4>
+              <p>Consistent header pattern with brand, navigation, and primary CTA. Used across all production pages.</p>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;header class="site-header" role="banner"&gt;
+  &lt;div class="site-brand"&gt;
+    &lt;div class="brand-mark"&gt;
+      &lt;img src="logo-light.png" alt="Puffin logo light" class="brand-logo logo-light" /&gt;
+      &lt;img src="logo-dark.png" alt="Puffin logo dark" class="brand-logo logo-dark" /&gt;
+    &lt;/div&gt;
+    &lt;div class="brand-text"&gt;
+      &lt;div class="brand-title"&gt;Puffin&lt;/div&gt;
+      &lt;div class="brand-subtitle"&gt;Teacher talks, AI writes&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;nav class="site-nav" aria-label="Primary"&gt;
+    &lt;a href="puffin-landing.html" class="nav-link"&gt;Home&lt;/a&gt;
+    &lt;a href="puffin-landing.html#how" class="nav-link"&gt;How it works&lt;/a&gt;
+    &lt;a href="privacy-policy.html" class="nav-link"&gt;Privacy Policy&lt;/a&gt;
+    &lt;a href="login.html" class="btn btn-primary"&gt;Try Puffin&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+          </div>
+
+          <!-- Navigation Best Practices -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Navigation Best Practices</h3>
+              <div class="grid-2" style="gap: 2rem; margin: 1rem 0;">
+                <div class="card">
+                  <h4>🏠 Information Architecture</h4>
+                  <ul>
+                    <li><strong>Home</strong> - Returns to main landing page</li>
+                    <li><strong>How it works</strong> - Product explanation</li>
+                    <li><strong>Privacy Policy</strong> - Data handling transparency</li>
+                    <li><strong>Try Puffin</strong> - Primary call-to-action</li>
+                  </ul>
+                </div>
+                <div class="card">
+                  <h4>🎯 Design Principles</h4>
+                  <ul>
+                    <li>Consistent navigation across all pages</li>
+                    <li>Clear visual hierarchy with primary CTA</li>
+                    <li>Accessible navigation with proper ARIA labels</li>
+                    <li>Mobile-responsive design</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Navigation Guidelines</h4>
+              <p>Best practices for implementing consistent navigation across Puffin pages.</p>
+            </div>
+          </div>
+
+          <!-- Alternative Header Patterns -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Alternative Header Patterns</h3>
+              <p>Additional header variations for different use cases (documentation, internal tools, etc.)</p>
+              
+              <!-- Guide Header -->
+              <header class="guide-header" style="position: relative; margin: 1rem 0;">
+                <div class="brand">
+                  <div class="brand-mark">
+                    <img src="logo-light.png" alt="Puffin logo light" class="brand-logo logo-light" />
+                    <img src="logo-dark.png" alt="Puffin logo dark" class="brand-logo logo-dark" />
+                  </div>
+                  <div class="brand-text">
+                    <div class="brand-title">Puffin</div>
+                    <div class="brand-subtitle">Design Guide</div>
+                  </div>
+                </div>
+                <div class="header-actions">
+                  <button class="btn btn-outline-primary">Copy Tokens</button>
+                  <a class="btn btn-tertiary" href="#" target="_blank">External Link ↗</a>
+                </div>
+              </header>
+            </div>
+            <div class="example-meta">
+              <h4>Guide Header Pattern</h4>
+              <p>Header pattern for documentation and internal tools with action buttons.</p>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;header class="guide-header"&gt;
+  &lt;div class="brand"&gt;
+    &lt;div class="brand-mark"&gt;
+      &lt;img src="logo-light.png" alt="Logo light" class="brand-logo logo-light" /&gt;
+      &lt;img src="logo-dark.png" alt="Logo dark" class="brand-logo logo-dark" /&gt;
+    &lt;/div&gt;
+    &lt;div class="brand-text"&gt;
+      &lt;div class="brand-title"&gt;Puffin&lt;/div&gt;
+      &lt;div class="brand-subtitle"&gt;Design Guide&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="header-actions"&gt;
+    &lt;button class="btn btn-outline-primary"&gt;Action Button&lt;/button&gt;
+    &lt;a class="btn btn-tertiary" href="#" target="_blank"&gt;External Link ↗&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+          </div>
+        </div>
+      </section>
+
       <section id="design-system" class="section">
         <div class="container">
           <h2>Complete Design System Reference</h2>
@@ -1079,17 +1216,269 @@
   &lt;link rel="stylesheet" href="guide.css"&gt;
 &lt;/head&gt;
 
-&lt;!-- Theme toggle example --&gt;
-&lt;script&gt;
-function toggleTheme() {
-  const html = document.documentElement;
-  const currentTheme = html.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', newTheme);
-}
-&lt;/script&gt;</code></pre>
+&lt;!-- Basic page structure --&gt;
+&lt;body&gt;
+  &lt;a class="skip-link" href="#main"&gt;Skip to content&lt;/a&gt;
+  
+  &lt;header class="site-header" role="banner"&gt;
+    &lt;!-- Header content --&gt;
+  &lt;/header&gt;
+  
+  &lt;main id="main" role="main"&gt;
+    &lt;!-- Page content --&gt;
+  &lt;/main&gt;
+  
+  &lt;footer class="site-footer" role="contentinfo"&gt;
+    &lt;!-- Footer content --&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;</code></pre>
           </div>
 
+        </div>
+      </section>
+
+      <!-- Page Examples Section -->
+      <section id="examples" class="section">
+        <div class="container">
+          <h2>Page Examples</h2>
+          <p>Real-world page patterns and layouts using the Puffin design system components.</p>
+
+          <!-- Landing Page Pattern -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Landing Page Pattern</h3>
+              <p>Complete landing page structure with hero, features, social proof, and conversion elements.</p>
+              
+              <div style="border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; background: var(--surface);">
+                <div class="hero" style="padding: 2rem 1rem; text-align: center;">
+                  <h1 style="margin-bottom: 1rem;">Product Name</h1>
+                  <p class="hero-subtitle">Clear value proposition and benefits</p>
+                  <div style="margin-top: 1.5rem;">
+                    <a href="#" class="btn btn-primary">Primary CTA</a>
+                    <a href="#" class="btn btn-outline-primary">Secondary CTA</a>
+                  </div>
+                </div>
+                
+                <div class="section" style="padding: 2rem 1rem;">
+                  <div class="inline-stats" style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="inline-stat" style="text-align: center;">
+                      <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">2,500+</div>
+                      <div style="font-size: 0.875rem; color: var(--muted);">Teachers</div>
+                    </div>
+                    <div class="inline-stat" style="text-align: center;">
+                      <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">15min</div>
+                      <div style="font-size: 0.875rem; color: var(--muted);">Time Saved</div>
+                    </div>
+                  </div>
+                  
+                  <div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="card">
+                      <h4>🎯 Feature One</h4>
+                      <p>Clear benefit description</p>
+                    </div>
+                    <div class="card">
+                      <h4>⚡ Feature Two</h4>
+                      <p>Clear benefit description</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Landing Page Structure</h4>
+              <p>Hero section with clear value prop, social proof stats, and feature highlights.</p>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;div class="hero"&gt;
+  &lt;h1&gt;Product Name&lt;/h1&gt;
+  &lt;p class="hero-subtitle"&gt;Clear value proposition&lt;/p&gt;
+  &lt;div&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Primary CTA&lt;/a&gt;
+    &lt;a href="#" class="btn btn-outline-primary"&gt;Secondary CTA&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="section"&gt;
+  &lt;div class="inline-stats"&gt;
+    &lt;div class="inline-stat"&gt;
+      &lt;div&gt;2,500+&lt;/div&gt;
+      &lt;div&gt;Teachers&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div class="feature-grid"&gt;
+    &lt;div class="card"&gt;
+      &lt;h4&gt;🎯 Feature One&lt;/h4&gt;
+      &lt;p&gt;Clear benefit description&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <!-- Privacy Policy Pattern -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Privacy Policy Pattern</h3>
+              <p>Clean, scannable privacy policy layout using cards and clear hierarchy.</p>
+              
+              <div style="border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; background: var(--surface);">
+                <div class="hero" style="padding: 2rem 1rem; text-align: center;">
+                  <h1 style="margin-bottom: 1rem;">Privacy Policy</h1>
+                  <p class="hero-subtitle">How we protect your data</p>
+                  <p class="chip">Last updated: August 2025</p>
+                </div>
+                
+                <div class="section" style="padding: 2rem 1rem;">
+                  <div class="content-width" style="max-width: 800px; margin: 0 auto;">
+                    <div class="card" style="border-left: 4px solid var(--secondary); margin-bottom: 1.5rem;">
+                      <strong>TL;DR:</strong> Privacy-first approach with clear data handling and user control.
+                    </div>
+                    
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                      <h3>1) What we collect</h3>
+                      <ul>
+                        <li><strong>Account:</strong> Email for sign-in</li>
+                        <li><strong>Usage:</strong> Minimal data for service</li>
+                      </ul>
+                    </div>
+                    
+                    <div class="card">
+                      <h3>2) How we use data</h3>
+                      <ul>
+                        <li><strong>Purpose:</strong> Provide the service</li>
+                        <li><strong>No marketing:</strong> We don't sell data</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Privacy Policy Layout</h4>
+              <p>Scannable privacy content with TL;DR summary and numbered sections in cards.</p>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;div class="hero"&gt;
+  &lt;h1&gt;Privacy Policy&lt;/h1&gt;
+  &lt;p class="hero-subtitle"&gt;How we protect your data&lt;/p&gt;
+  &lt;p class="chip"&gt;Last updated: August 2025&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="section"&gt;
+  &lt;div class="content-width"&gt;
+    &lt;div class="card" style="border-left: 4px solid var(--secondary);"&gt;
+      &lt;strong&gt;TL;DR:&lt;/strong&gt; Privacy-first approach summary
+    &lt;/div&gt;
+    
+    &lt;div class="card"&gt;
+      &lt;h3&gt;1) What we collect&lt;/h3&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;strong&gt;Account:&lt;/strong&gt; Email for sign-in&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <!-- Login/Beta Access Pattern -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Login/Beta Access Pattern</h3>
+              <p>Simple beta access request page with clear contact information.</p>
+              
+              <div style="border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; background: var(--surface);">
+                <div class="hero" style="padding: 2rem 1rem; text-align: center;">
+                  <div class="chip" style="margin-bottom: 1rem;">Beta Testing</div>
+                  <h1 style="margin-bottom: 1rem;">Ready to try Product?</h1>
+                  <p class="hero-subtitle">We're currently in beta testing</p>
+                  
+                  <div class="card" style="margin: 2rem auto; max-width: 400px;">
+                    <h2>Get early access</h2>
+                    <p>Interested in trying with your class?</p>
+                    <p>
+                      <a href="mailto:contact@example.com" style="color: var(--primary); font-weight: 600;">contact@example.com</a>
+                    </p>
+                    <p style="font-size: 0.9rem; color: var(--muted);">
+                      Tell us about your context and we'll get back to you.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Beta Access Layout</h4>
+              <p>Simple beta request page with clear contact and context gathering.</p>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;div class="hero"&gt;
+  &lt;div class="chip"&gt;Beta Testing&lt;/div&gt;
+  &lt;h1&gt;Ready to try Product?&lt;/h1&gt;
+  &lt;p class="hero-subtitle"&gt;We're currently in beta testing&lt;/p&gt;
+  
+  &lt;div class="card"&gt;
+    &lt;h2&gt;Get early access&lt;/h2&gt;
+    &lt;p&gt;Interested in trying with your class?&lt;/p&gt;
+    &lt;p&gt;
+      &lt;a href="mailto:contact@example.com"&gt;contact@example.com&lt;/a&gt;
+    &lt;/p&gt;
+    &lt;p&gt;Tell us about your context&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <!-- Content Layout Patterns -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <h3>Content Layout Patterns</h3>
+              <p>Common content structure patterns for consistent page layouts.</p>
+              
+              <div style="border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; background: var(--surface);">
+                <div class="section" style="padding: 1rem;">
+                  <div class="container">
+                    <div class="text-center" style="margin-bottom: 2rem;">
+                      <h2 class="section-title">Section Title</h2>
+                      <p class="section-subtitle">Supporting description text</p>
+                    </div>
+                    
+                    <div class="two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                      <div class="card">
+                        <h3>Left Column</h3>
+                        <p>Content for left side</p>
+                      </div>
+                      <div class="card">
+                        <h3>Right Column</h3>
+                        <p>Content for right side</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Section Layout Pattern</h4>
+              <p>Standard section with centered title/subtitle and two-column content grid.</p>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;div class="section"&gt;
+  &lt;div class="container"&gt;
+    &lt;div class="text-center"&gt;
+      &lt;h2 class="section-title"&gt;Section Title&lt;/h2&gt;
+      &lt;p class="section-subtitle"&gt;Supporting description&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="two-col"&gt;
+      &lt;div class="card"&gt;
+        &lt;h3&gt;Left Column&lt;/h3&gt;
+        &lt;p&gt;Content for left side&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class="card"&gt;
+        &lt;h3&gt;Right Column&lt;/h3&gt;
+        &lt;p&gt;Content for right side&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
         </div>
       </section>
 
