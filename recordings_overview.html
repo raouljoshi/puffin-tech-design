@@ -510,5 +510,29 @@
       });
     });
   </script>
+
+  <script>
+    // Navigate to type_review.html when clicking rows of Type REVIEW
+    (function() {
+      const rows = document.querySelectorAll('.recordings-table tbody tr');
+      rows.forEach((row) => {
+        const typeEl = row.querySelector('.type-display');
+        const idEl = row.querySelector('.entry-id');
+        if (!typeEl || !idEl) return;
+        const type = typeEl.textContent.trim().toUpperCase();
+        const id = idEl.textContent.trim();
+        if (type === 'REVIEW') {
+          const go = () => { window.location.href = `type_review.html?id=${encodeURIComponent(id)}`; };
+          row.addEventListener('click', go);
+          row.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              go();
+            }
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

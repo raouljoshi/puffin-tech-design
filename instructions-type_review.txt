@@ -1,0 +1,308 @@
+Type_Review Frontend Spec (for mock implementation)
+
+Overview
+The page is a three-panel workspace layout inside a <main> with data attributes for school and locale.
+Panels:
+Recording Properties + Configuration (left aside)
+Development Memo Editor (center section)
+Subject Notes (right aside)
+A transcription modal is expected (triggered via a data attribute).
+Frontend JS wires up text counts, auto-save, formatting actions, export to PDF (jsPDF), simple configuration save, and subject notes save.
+Global Layout and Assets
+Main container: in 
+memo_workspace.html
+<main class="dark-theme memo-workspace-layout" data-locale="...">
+Optional attributes when school present:
+data-school-name="{{.School.Name}}"
+data-huvudman="{{.School.Huvudman}}"
+Child partials are rendered in order:
+memo_workspace_sidebar
+memo_workspace_editor
+memo_workspace_subjects
+transcription_modal (modal partial; not shown here, but must exist in DOM)
+Stylesheet:
+<link rel="stylesheet" href="/public/css/memo_workspace.css">
+Expected CSS classes throughout: workspace-panel, panel-header, panel-actions, panel-content, panel-sub-header, editor-tools, metadata-list, metadata-item, etc.
+Scripts:
+jsPDF: https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js
+Page script: 
+/public/js/memo_workspace.js
+Panel 1: Recording Properties and Configuration
+Root element: aside.workspace-panel.properties-panel with ARIA role and label
+<aside class="workspace-panel properties-panel" role="complementary" aria-label="Recording Properties">
+Header row:
+Title: <h3> — localized “Recording Properties”
+Actions:
+Back button: <button type="button" class="btn-tertiary"> navigates to /app/recordings
+Save config button: <button type="submit" class="btn-secondary" id="save-config" form="config-form">Save</button>
+Audio section:
+Section: <section class="property-section audio-section">
+Title: <h4 class="section-title">Audio recording</h4>
+Audio player:
+<audio class="audio-player" controls controlsList="nodownload noremoteplayback" preload="metadata" src="/api/recordings/{id}/audio">
+Metadata list (used by JS PDF export to extract date/duration):
+<dl class="metadata-list">
+Items are <div class="metadata-item">
+Date: <dt>Date</dt> <dd><time datetime="YYYY-MM-DD">Mon D, YYYY</time></dd>
+Duration (optional): <dt>Duration</dt> <dd>...</dd>
+Language (optional): <dt>Language</dt> <dd>Localized Language Name</dd>
+Transcription button (optional, if transcription exists):
+<button type="button" class="btn-tertiary" data-modal-target="transcription-modal">View transcription</button>
+This implies a modal with id or matching target “transcription-modal” is present elsewhere in DOM.
+Configuration section:
+Section: <section class="property-section config-section">
+Title: <h4 class="section-title">Configuration</h4>
+Form: <form id="config-form" class="config-form" novalidate>
+Child Name:
+<input id="child-name" name="childName" type="text" class="form-input" maxlength="100" autocomplete="given-name">
+Teacher Name:
+<input id="teacher-name" name="teacherName" type="text" class="form-input" maxlength="100" autocomplete="name">
+Grade Band:
+<select id="grade-band" name="gradeBand" class="form-select" aria-describedby="grade-help">
+Options: "" (Select), "0-4", "5-8", "9-12"
+Help text: <small id="grade-help" class="form-help">...</small>
+Secondary Language:
+<select id="secondary-language" name="secondaryLanguage" class="form-select" aria-describedby="secondary-language-help">
+Options include: en-US, de-DE, sv-SE, ar, pl, fi, no, da, is, fr, es, it, pt, ru, tr, nl, hu, cs, sk, bg, ro, hr, sr, uk, zh, ja, ko
+In original, the list excludes the recording’s primary language; for mock, you can include the full list.
+Help text: <small id="secondary-language-help" class="form-help">...</small>
+Generate memo (future/LLM trigger placeholder):
+<div class="generate-memo-section">
+<button type="button" class="btn-tertiary" id="generate-memo">Generate memo</button>
+Panel 2: Development Memo Editor
+Root element: section.workspace-panel.edit-panel
+<section class="workspace-panel edit-panel">
+Panel header:
+Title: <h3>Development Memo</h3>
+Actions:
+Export: <button type="button" class="btn-tertiary" id="export-memo">Export</button>
+Save: <button type="button" class="btn-secondary" id="save-memo">Save</button>
+Sub-header:
+Left stats:
+Word count: <span id="word-count">0 Words</span>
+Char count: <span id="char-count">0 Characters</span>
+Editor tools:
+Bold: <button type="button" class="btn-icon" id="format-bold" title="Bold"><strong>B</strong></button>
+Italic: <button type="button" class="btn-icon" id="format-italic" title="Italic"><em>I</em></button>
+Insert timestamp: <button type="button" class="btn-icon" id="insert-timestamp" title="Insert timestamp">🕒</button>
+Editor content:
+Container: <div class="memo-editor-container">
+Textarea:
+<textarea id="memo-editor" class="memo-editor" placeholder="Start writing your memo" spellcheck="true" data-recording-id="{id}">...</textarea>
+Panel 3: Subject Notes
+Root element: aside.workspace-panel.subjects-panel with ARIA role and label
+<aside class="workspace-panel subjects-panel" role="complementary" aria-label="Subject Notes">
+Header row:
+Title: <h3>Subject Notes</h3>
+Actions:
+Export all: <button type="button" class="btn-tertiary" id="export-subjects">Export</button>
+Save all: <button type="button" class="btn-secondary" id="save-all-subjects">Save</button>
+Content:
+Container: <div class="subjects-container">
+Repeated subject item (one per subject key; in original driven by SubjectAreaArray):
+<div class="subject-item" data-subject="{subjectKey}">
+Header:
+Title: <h4 class="subject-title">{Localized Subject Name}</h4>
+Toggle: <button type="button" class="btn-icon subject-toggle" title="Toggle subject notes"><span class="toggle-icon">▼</span></button>
+Content:
+<div class="subject-content">
+Textarea:
+<textarea class="subject-textarea" id="subject-{subjectKey}" name="subject_{subjectKey}" data-subject-key="{subjectKey}" data-recording-id="{id}"></textarea>
+Meta:
+<span class="char-count" data-target="subject-{subjectKey}">0 Characters</span>
+Expected Behaviors (Frontend only)
+Word/Char counts update live for the memo editor.
+JS reads initial labels from #word-count and #char-count textContent (after removing leading numbers) to preserve localization.
+Auto-save (memo): keystrokes debounce and POST to /api/recordings/{id}/memo with JSON { content, status: 'draft' }. For mock, stub the call and show UI feedback:
+#save-memo changes text to “Saved” → reverts to “Save”.
+#last-modified is updated if present (the template has last-modified span referenced in JS; you can include a placeholder in DOM if desired).
+Manual save (memo): clicking #save-memo triggers the same save handler.
+Formatting:
+#format-bold: wraps selection in ** for Markdown-like bold.
+#format-italic: wraps selection in * for italic.
+#insert-timestamp: inserts [<locale date/time>] at cursor.
+Export to PDF:
+#export-memo uses jsPDF if available; otherwise falls back to .txt download.
+Pulls:
+Memo content from #memo-editor.
+Recording info (student name and teacher from #config-form, and date/duration from .metadata-item list).
+Optional secondary language from #secondary-language.
+Adds letterhead (school name left, huvudman right) using <main> data attributes if present.
+Adds localized headers (To/From/Date/Development Memo) via internal helper; for mock, static English is fine.
+If secondary language selected, calls translation API; for mock, display a placeholder translation block.
+Configuration save:
+Form #config-form submit posts JSON {childName, teacherName, gradeBand, secondaryLanguage} to /api/recordings/{id}/configuration. For mock, prevent default and show UI feedback on #save-config.
+Subject notes:
+Each subject textarea updates a .char-count aligned by data-target.
+Save all: iterates and posts per subject { subject, content } to /api/recordings/{id}/subjects. For mock, just show feedback.
+Local storage usage is referenced in JS for draft persistence; you can implement or skip for a static mock.
+Toggle button collapses/expands subject content.
+Transcription modal:
+Clicking the “View transcription” button (if present) with data-modal-target="transcription-modal" opens a modal with that identifier. Include a basic modal scaffold with matching id.
+IDs and Selectors (critical for JS wiring)
+Main container: main.memo-workspace-layout with data-locale, optional data-school-name, data-huvudman
+Properties panel:
+Back button: .btn-tertiary (navigates to recordings list)
+Save config: #save-config (submits #config-form)
+Audio: audio.audio-player
+Metadata list items: .metadata-item with dt and dd
+Transcription trigger: [data-modal-target="transcription-modal"]
+Config form: #config-form
+Inputs:
+#child-name (name="childName")
+#teacher-name (name="teacherName")
+#grade-band (name="gradeBand")
+#secondary-language (name="secondaryLanguage")
+Generate memo: #generate-memo (optional)
+Editor panel:
+Export: #export-memo
+Save: #save-memo
+Counts: #word-count, #char-count
+Tools: #format-bold, #format-italic, #insert-timestamp
+Editor: #memo-editor with data-recording-id
+Subjects panel:
+Export all: #export-subjects
+Save all: #save-all-subjects
+Each subject:
+.subject-item[data-subject="{key}"]
+Toggle: .subject-toggle
+Textarea: #subject-{key}.subject-textarea[data-subject-key="{key}"][data-recording-id]
+Count: .char-count[data-target="subject-{key}"]
+Modal:
+Include an element matching the trigger: e.g., <div id="transcription-modal">...</div>
+Accessibility Notes
+aside panels use role="complementary" with aria-label set to localized section names.
+Section titles use <h3> and <h4> hierarchy.
+<audio> includes a fallback paragraph with a download link.
+External Dependencies and Assumptions
+jsPDF UMD build included via CDN; code expects window.jspdf.jsPDF.
+Styling assumes a design system with classes like btn-secondary, btn-tertiary, btn-icon, and .dark-theme.
+Localization placeholders exist in the original; for a mock you can hardcode English strings.
+Minimal HTML Skeleton (structure only)
+This is a condensed snippet illustrating structure and ids/classes to guide the mock. You can fill in localized text and styling.
+
+<main class="dark-theme memo-workspace-layout" data-locale="en-US" data-school-name="Sample School" data-huvudman="Sample District">
+  <aside class="workspace-panel properties-panel" role="complementary" aria-label="Recording Properties">
+    <div class="panel-header">
+      <h3>Recording Properties</h3>
+      <div class="panel-actions">
+        <button type="button" class="btn-tertiary">Back</button>
+        <button type="submit" class="btn-secondary" id="save-config" form="config-form">Save</button>
+      </div>
+    </div>
+    <div class="panel-content">
+      <section class="property-section audio-section">
+        <h4 class="section-title">Audio recording</h4>
+        <div class="audio-controls">
+          <audio class="audio-player" controls controlsList="nodownload noremoteplayback" preload="metadata" src="/api/recordings/1/audio"></audio>
+        </div>
+        <dl class="metadata-list">
+          <div class="metadata-item"><dt>Date</dt><dd><time datetime="2025-08-01">Aug 1, 2025</time></dd></div>
+          <div class="metadata-item"><dt>Duration</dt><dd>00:10:23</dd></div>
+          <div class="metadata-item"><dt>Language</dt><dd>English</dd></div>
+        </dl>
+        <div class="transcription-actions">
+          <button type="button" class="btn-tertiary" data-modal-target="transcription-modal">View transcription</button>
+        </div>
+      </section>
+
+      <section class="property-section config-section">
+        <h4 class="section-title">Configuration</h4>
+        <form id="config-form" class="config-form" novalidate>
+          <div class="form-group">
+            <label for="child-name" class="form-label">Student Name</label>
+            <input id="child-name" name="childName" type="text" class="form-input" maxlength="100" autocomplete="given-name" />
+          </div>
+          <div class="form-group">
+            <label for="teacher-name" class="form-label">Teacher</label>
+            <input id="teacher-name" name="teacherName" type="text" class="form-input" maxlength="100" autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="grade-band" class="form-label">Grade Band</label>
+            <select id="grade-band" name="gradeBand" class="form-select" aria-describedby="grade-help">
+              <option value="">Select grade band</option>
+              <option value="0-4">Elementary</option>
+              <option value="5-8">Middle School</option>
+              <option value="9-12">High School</option>
+            </select>
+            <small id="grade-help" class="form-help">Choose the most appropriate level.</small>
+          </div>
+          <div class="form-group">
+            <label for="secondary-language" class="form-label">Secondary Language</label>
+            <select id="secondary-language" name="secondaryLanguage" class="form-select" aria-describedby="secondary-language-help">
+              <option value="">Select secondary language</option>
+              <option value="en-US">English</option>
+              <option value="de-DE">German</option>
+              <option value="sv-SE">Swedish</option>
+              <!-- ...other codes as needed -->
+            </select>
+            <small id="secondary-language-help" class="form-help">Used for memo translation on export.</small>
+          </div>
+        </form>
+        <div class="generate-memo-section">
+          <button type="button" class="btn-tertiary" id="generate-memo">Generate memo</button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <section class="workspace-panel edit-panel">
+    <div class="panel-header">
+      <h3>Development Memo</h3>
+      <div class="panel-actions">
+        <button type="button" class="btn-tertiary" id="export-memo">Export</button>
+        <button type="button" class="btn-secondary" id="save-memo">Save</button>
+      </div>
+    </div>
+    <div class="panel-sub-header">
+      <div class="sub-header-left">
+        <div class="editor-stats">
+          <span id="word-count">0 Words</span>
+          <span id="char-count">0 Characters</span>
+        </div>
+      </div>
+      <div class="editor-tools">
+        <button type="button" class="btn-icon" id="format-bold" title="Bold"><strong>B</strong></button>
+        <button type="button" class="btn-icon" id="format-italic" title="Italic"><em>I</em></button>
+        <button type="button" class="btn-icon" id="insert-timestamp" title="Insert timestamp">🕒</button>
+      </div>
+    </div>
+    <div class="panel-content">
+      <div class="memo-editor-container">
+        <textarea id="memo-editor" class="memo-editor" data-recording-id="1" placeholder="Start writing your memo" spellcheck="true"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <aside class="workspace-panel subjects-panel" role="complementary" aria-label="Subject Notes">
+    <div class="panel-header">
+      <h3>Subject Notes</h3>
+      <div class="panel-actions">
+        <button type="button" class="btn-tertiary" id="export-subjects">Export</button>
+        <button type="button" class="btn-secondary" id="save-all-subjects">Save</button>
+      </div>
+    </div>
+    <div class="panel-content">
+      <div class="subjects-container">
+        <div class="subject-item" data-subject="artsAndCraft">
+          <div class="subject-header">
+            <h4 class="subject-title">Arts and Crafts</h4>
+            <button type="button" class="btn-icon subject-toggle" title="Toggle subject notes"><span class="toggle-icon">▼</span></button>
+          </div>
+          <div class="subject-content">
+            <textarea class="subject-textarea" id="subject-artsAndCraft" name="subject_artsAndCraft" data-subject-key="artsAndCraft" data-recording-id="1"></textarea>
+            <div class="subject-meta">
+              <span class="char-count" data-target="subject-artsAndCraft">0 Characters</span>
+            </div>
+          </div>
+        </div>
+        <!-- Repeat subject-item for remaining subjects -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- Transcription Modal scaffold -->
+  <div id="transcription-modal" hidden>
+    <!-- modal content and close controls -->
+  </div>
+</main>
