@@ -1,0 +1,47 @@
+Product Introduction – Puffin
+
+What is Puffin?
+----------------
+Puffin is a teacher-centered AI platform that transforms unstructured teacher voice inputs into structured, actionable educational feedback. Teachers can use Puffin to record reflections—about student work, classroom progress, or development talks—and receive polished feedback drafts that can be copied into their existing channels like LMS platforms, emails, or PDF reports.
+
+Value Proposition
+-----------------
+- **Build on what you do** – use voice, not typing.
+- **Immediate relevance** – capture insights while they’re fresh.
+- **Teacher-first control** – you write, we draft; you edit and approve.
+- **Plug-and-play integration** – works alongside systems you already use.
+
+Data Entry Workspace
+---------------------
+Teachers manage their feedback entries in a clean, filterable dashboard. Each entry is its own row, enabling quick filtering, reviewing, and action. Clicking a row opens a detailed page where the transcript, AI-draft, and metadata are presented for editing and export.
+
+**Table column structure (per row):**
+- Unique entry ID
+- Optional student first name
+- Custom entry label or identifier (editable)
+- Date/time created
+- Audio duration (e.g. “2:34”)
+- Type: Assessment | Short-Cycle Note | Development Memo
+- Button to “View transcript”
+- Delete icon (with “Are you sure?” confirmation)
+
+**Table features:**
+- **Sortable columns** (date, name, type)
+- **Search and filter**: by student, type, or date range
+- **Responsive behavior**: row density settings, sticky headers, and horizontal scroll for tables on tablets or desktops
+- **Hover or click state**: indicates row is clickable and opens detail view
+
+Best Practice Guidelines (based on UX research):
+- Tables support four core user actions: find, compare, view/edit, take action.  [oai_citation:0‡Halo Lab](https://www.halo-lab.com/blog/dashboard-design-examples?utm_source=chatgpt.com) [oai_citation:1‡ThemeSelection](https://themeselection.com/academy-dashboard/?srsltid=AfmBOop0GWL2sJo-qu3UMRcEiuN7pW3U9sYDpOoMSaNruZQbNA3njxHW&utm_source=chatgpt.com) [oai_citation:2‡Five](https://five.co/use-cases/student-performance-dashboard/?utm_source=chatgpt.com) [oai_citation:3‡Mockplus](https://www.mockplus.com/blog/post/dashboard-design-best-practices-examples?utm_source=chatgpt.com) [oai_citation:4‡pencilandpaper.io](https://www.pencilandpaper.io/articles/ux-pattern-analysis-enterprise-data-tables?utm_source=chatgpt.com) [oai_citation:5‡Nielsen Norman Group](https://www.nngroup.com/articles/data-tables/?utm_source=chatgpt.com)
+- Provide **column visibility control**, sticky headers, and consistent row interactions.  [oai_citation:6‡mobilespoon.net](https://www.mobilespoon.net/2019/11/design-ui-tables-20-rules-guide.html?utm_source=chatgpt.com) [oai_citation:7‡pencilandpaper.io](https://www.pencilandpaper.io/articles/ux-pattern-analysis-enterprise-data-tables?utm_source=chatgpt.com)
+- Offer **hover states** or inline previews for quick insights without leaving context.  [oai_citation:8‡pencilandpaper.io](https://www.pencilandpaper.io/articles/ux-pattern-analysis-enterprise-data-tables?utm_source=chatgpt.com)
+- Pagination or infinite scroll with adjustable **display density** improves data legibility.  [oai_citation:9‡pencilandpaper.io](https://www.pencilandpaper.io/articles/ux-pattern-analysis-enterprise-data-tables?utm_source=chatgpt.com)
+- Make action buttons (e.g. delete, view draft) context-aware and accessibly labeled.
+
+UX Inspiration:
+---------------
+Design patterns from dashboards in teacher-management platforms and enterprise tables offer rich guidance. You can refer to education-focused dashboard layouts and table interactions that make data rich yet manageable.  [oai_citation:10‡Nielsen Norman Group](https://www.nngroup.com/articles/data-tables/?utm_source=chatgpt.com) [oai_citation:11‡Denovers](https://denovers.com/blog/enterprise-table-ux-design/?utm_source=chatgpt.com)
+
+Summary
+--------
+Puffin’s product design is focused on enabling teachers to effortlessly capture and manage formative feedback using voice, delivered in an interface that mirrors best-in-class dashboard and table UX. The combination of voice-driven input and a powerful, intuitive table view makes it both efficient and impactful.
