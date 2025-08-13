@@ -67,8 +67,10 @@
       </div>
     </div>
     <nav class="site-nav" aria-label="Primary">
-      <a href="puffin-landing.html" class="nav-link">← Back to landing page</a>
-      <button class="theme-toggle btn btn-secondary" id="themeToggle">🌙 Dark Mode</button>
+      <a href="puffin-landing.html" class="nav-link">Home</a>
+      <a href="puffin-landing.html#how" class="nav-link">How it works</a>
+      <a href="privacy-policy.html" class="nav-link">Privacy Policy</a>
+      <a href="login.html" class="btn btn-primary">Try Puffin</a>
     </nav>
   </header>
 
@@ -137,28 +139,6 @@
     </div>
   </footer>
 
-  <!-- Theme Toggle Script -->
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
-    const html = document.documentElement;
-    
-    // Load saved theme or default to light
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', savedTheme);
-    updateToggleText(savedTheme);
-    
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      updateToggleText(newTheme);
-    });
-    
-    function updateToggleText(theme) {
-      themeToggle.textContent = theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
-    }
-  </script>
+
 </body>
 </html>
