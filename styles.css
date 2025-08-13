@@ -82,6 +82,8 @@
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
     --shadow-md: 0 4px 6px rgba(0,0,0,0.10);
     --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+    /* Typography families */
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* Dark theme overrides activated via [data-theme="dark"] ------------------ */
@@ -456,6 +458,32 @@ textarea:focus-visible { box-shadow: 0 0 0 3px var(--focus-ring); outline: none;
   border: 1px solid var(--border); color: var(--muted); border-radius: 0.5rem; white-space: nowrap;
 }
 .input-group input { border-radius: 0.5rem; }
+
+/* 14) Utility layouts & inline actions ------------------------------------ */
+/* Page header with right-aligned actions */
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+
+/* Slim toolbar row for table utilities */
+.table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.5rem 0; margin-bottom: 1rem; }
+
+/* Compact inline text buttons for table row actions */
+.btn-icon {
+  padding: 0.35rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.8rem;
+  border-radius: 4px;
+}
+.btn-icon:hover { background: rgba(31, 78, 121, 0.08); color: var(--foreground); }
+.btn-icon.btn-danger { color: var(--danger); }
+.btn-icon.btn-danger:hover { background: rgba(226, 74, 59, 0.08); }
+
+/* Mono text helpers */
+.text-mono { font-family: var(--font-mono); }
+.entry-id { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
 .input-group .prefix { border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
 .input-group .suffix { border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0; }
 .input-group .prefix + input { border-top-left-radius: 0; border-bottom-left-radius: 0; }

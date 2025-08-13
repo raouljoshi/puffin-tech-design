@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Recordings | Puffin</title>
-  <meta name="description" content="Manage your voice recordings and AI-generated feedback drafts." />
   <meta name="theme-color" content="#1F4E79" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="guide.css" />
@@ -12,8 +11,8 @@
     .dashboard-header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 2rem 0;
-      margin-bottom: 2rem;
+      padding: 1.5rem 0;
+      margin-bottom: 1rem;
     }
     
     .dashboard-title {
@@ -28,20 +27,9 @@
       font-size: 1.1rem;
     }
     
-    .filters-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
+    /* Toolbar layout provided by global .table-toolbar */
     
-    .filters-grid {
-      display: grid;
-      grid-template-columns: 1fr 200px 200px auto;
-      gap: 1rem;
-      align-items: end;
-    }
+    .filters-grid { display: flex; align-items: center; gap: 0.75rem; }
     
     .filter-group {
       display: flex;
@@ -121,6 +109,16 @@
       position: relative;
     }
     
+    .recordings-table th,
+    .recordings-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
     .recordings-table th:hover {
       background: rgba(31,78,121,0.1);
     }
@@ -149,15 +147,20 @@
       background: rgba(31,78,121,0.04);
     }
     
-    .entry-id {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
+    /* .entry-id now provided by global styles.css */
     
     .student-name {
-      font-weight: 600;
+      font-weight: 400;
       color: var(--foreground);
+    }
+    
+    .student-name.editable {
+      border-bottom: 1px dashed var(--border);
+      cursor: text;
+    }
+    
+    .student-name.editable:hover {
+      border-bottom-color: var(--primary);
     }
     
     .entry-label {
@@ -178,35 +181,14 @@
       font-size: 0.9rem;
     }
     
-    .duration {
+    .duration, .type-display {
       font-family: var(--font-mono);
       font-size: 0.9rem;
       color: var(--text);
       background: rgba(31,78,121,0.08);
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
-    }
-    
-    .type-badge {
-      font-size: 0.8rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      font-weight: 500;
-    }
-    
-    .type-assessment {
-      background: rgba(16,185,129,0.12);
-      color: var(--success);
-    }
-    
-    .type-note {
-      background: rgba(59,130,246,0.12);
-      color: var(--info);
-    }
-    
-    .type-memo {
-      background: rgba(245,158,11,0.12);
-      color: var(--warning);
+      display: inline-block;
     }
     
     .action-buttons {
@@ -215,27 +197,17 @@
       align-items: center;
     }
     
-    .action-btn {
-      padding: 0.5rem;
-      border: none;
-      background: none;
-      color: var(--muted);
-      cursor: pointer;
-      border-radius: 0.25rem;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    /* Inline action button styling provided by global .btn-icon */
     
-    .action-btn:hover {
-      background: rgba(31,78,121,0.08);
-      color: var(--primary);
-    }
+    /* Hover state provided by global .btn-icon:hover */
     
-    .action-btn.delete:hover {
-      background: rgba(239,68,68,0.1);
+    .btn-icon.btn-danger {
       color: var(--danger);
+    }
+    
+    .btn-icon.btn-danger:hover {
+      color: white;
+      background: var(--danger);
     }
     
     .empty-state {
@@ -323,194 +295,137 @@
   <main id="main" role="main">
     <!-- Dashboard Header -->
     <section class="dashboard-header">
-      <div class="container">
+      <div class="container page-header">
         <h1 class="dashboard-title">My Recordings</h1>
-        <p class="dashboard-subtitle">Manage your voice recordings and AI-generated feedback drafts</p>
+        <button class="btn btn-outline-primary" id="new-recording-btn">New recording</button>
       </div>
     </section>
 
     <div class="container">
-      <!-- Filters Section -->
-      <section class="filters-section">
+      <!-- Filters Toolbar -->
+      <div class="table-toolbar">
         <div class="filters-grid">
           <div class="filter-group">
-            <label class="filter-label" for="search-input">Search recordings</label>
             <div class="input-group">
-              <span class="prefix">🔍</span>
+              <span class="prefix" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+                </svg>
+              </span>
               <input 
                 type="text" 
                 id="search-input" 
-                placeholder="Search by student name, label, or content..."
-                aria-label="Search recordings"
+                placeholder="Filter by name, label, date..."
+                aria-label="Filter recordings"
               />
             </div>
           </div>
-          
-          <div class="filter-group">
-            <label class="filter-label" for="type-filter">Type</label>
-            <select id="type-filter" aria-label="Filter by type">
-              <option value="">All Types</option>
-              <option value="assessment">Assessment</option>
-              <option value="note">Short-Cycle Note</option>
-              <option value="memo">Development Memo</option>
-            </select>
-          </div>
-          
-          <div class="filter-group">
-            <label class="filter-label" for="date-filter">Date Range</label>
-            <select id="date-filter" aria-label="Filter by date">
-              <option value="">All Time</option>
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="custom">Custom Range</option>
-            </select>
-          </div>
-          
-          <div class="filter-group">
-            <button class="btn btn-primary" id="new-recording-btn">
-              + New Recording
-            </button>
-          </div>
         </div>
-      </section>
+      </div>
 
       <!-- Recordings Table -->
       <section class="recordings-table-container">
         <div class="table-header">
           <h2 class="table-title">Recordings Overview</h2>
-          <div class="table-actions">
-            <div class="density-controls">
-              <button class="density-btn active" data-density="comfortable">Comfortable</button>
-              <button class="density-btn" data-density="compact">Compact</button>
-            </div>
-            <button class="btn btn-outline-secondary btn-sm">Export</button>
-          </div>
+          <div class="table-actions"></div>
         </div>
         
         <div style="overflow-x: auto;">
           <table class="recordings-table" role="table">
             <thead>
               <tr>
-                <th scope="col" data-sort="id">
-                  Entry ID
-                  <span class="sort-indicator">↕</span>
-                </th>
-                <th scope="col" data-sort="student">
-                  Student
-                  <span class="sort-indicator">↕</span>
-                </th>
-                <th scope="col" data-sort="label">
-                  Label
-                  <span class="sort-indicator">↕</span>
-                </th>
-                <th scope="col" data-sort="date">
-                  Date/Time
-                  <span class="sort-indicator">↕</span>
-                </th>
-                <th scope="col" data-sort="duration">
-                  Duration
-                  <span class="sort-indicator">↕</span>
-                </th>
-                <th scope="col" data-sort="type">
-                  Type
-                  <span class="sort-indicator">↕</span>
-                </th>
-                <th scope="col">Actions</th>
+                <th scope="col" style="width: 70px">ID</th>
+                <th scope="col" style="width: 120px">Name</th>
+                <th scope="col" style="width: 150px">Label</th>
+                <th scope="col" style="width: 100px">Created</th>
+                <th scope="col" style="width: 80px">Time</th>
+                <th scope="col" style="width: 80px">Duration</th>
+                <th scope="col" style="width: 100px">Type</th>
+                <th scope="col" style="width: 100px">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr data-entry-id="PF-2024-001" tabindex="0" role="button" aria-label="Open recording PF-2024-001">
-                <td><span class="entry-id">PF-2024-001</span></td>
-                <td><span class="student-name">Emma Rodriguez</span></td>
-                <td><span class="entry-label editable">Math Assessment - Fractions</span></td>
-                <td><span class="date-time">Jan 15, 2024<br>2:34 PM</span></td>
+              <tr data-entry-id="PF001" tabindex="0" role="button" aria-label="Open recording PF001">
+                <td><span class="entry-id">PF001</span></td>
+                <td><span class="student-name editable">Emma</span></td>
+                <td><span class="entry-label editable">Math Assessment</span></td>
+                <td><span class="date-time">2024-01-24</span></td>
+                <td><span class="date-time">14:34</span></td>
                 <td><span class="duration">3:42</span></td>
-                <td><span class="type-badge type-assessment">Assessment</span></td>
+                <td><span class="type-display">ASSESSMENT</span></td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn" title="View transcript" aria-label="View transcript for PF-2024-001">
-                      📄
-                    </button>
-                    <button class="action-btn delete" title="Delete recording" aria-label="Delete recording PF-2024-001">
-                      🗑️
-                    </button>
+                    <button class="btn-icon" title="Preview" aria-label="Preview recording">View</button>
+                    <button class="btn-icon" title="Export" aria-label="Export recording">Export</button>
+                    <button class="btn-icon btn-danger" title="Delete" aria-label="Delete recording">Delete</button>
                   </div>
                 </td>
               </tr>
               
-              <tr data-entry-id="PF-2024-002" tabindex="0" role="button" aria-label="Open recording PF-2024-002">
-                <td><span class="entry-id">PF-2024-002</span></td>
-                <td><span class="student-name">Marcus Chen</span></td>
+              <tr data-entry-id="PF002" tabindex="0" role="button" aria-label="Open recording PF002">
+                <td><span class="entry-id">PF002</span></td>
+                <td><span class="student-name editable">Marcus</span></td>
                 <td><span class="entry-label editable">Reading Progress Check</span></td>
-                <td><span class="date-time">Jan 14, 2024<br>10:15 AM</span></td>
+                <td><span class="date-time">2024-01-14</span></td>
+                <td><span class="date-time">10:15</span></td>
                 <td><span class="duration">2:18</span></td>
-                <td><span class="type-badge type-note">Short-Cycle Note</span></td>
+                <td><span class="type-display">NOTE</span></td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn" title="View transcript" aria-label="View transcript for PF-2024-002">
-                      📄
-                    </button>
-                    <button class="action-btn delete" title="Delete recording" aria-label="Delete recording PF-2024-002">
-                      🗑️
-                    </button>
+                    <button class="btn-icon" title="Preview" aria-label="Preview recording">View</button>
+                    <button class="btn-icon" title="Export" aria-label="Export recording">Export</button>
+                    <button class="btn-icon btn-danger" title="Delete" aria-label="Delete recording">Delete</button>
                   </div>
                 </td>
               </tr>
               
-              <tr data-entry-id="PF-2024-003" tabindex="0" role="button" aria-label="Open recording PF-2024-003">
-                <td><span class="entry-id">PF-2024-003</span></td>
-                <td><span class="student-name">Aisha Patel</span></td>
+              <tr data-entry-id="PF003" tabindex="0" role="button" aria-label="Open recording PF003">
+                <td><span class="entry-id">PF003</span></td>
+                <td><span class="student-name editable">Aisha</span></td>
                 <td><span class="entry-label editable">Parent Conference Notes</span></td>
-                <td><span class="date-time">Jan 12, 2024<br>4:45 PM</span></td>
+                <td><span class="date-time">2024-01-12</span></td>
+                <td><span class="date-time">16:45</span></td>
                 <td><span class="duration">5:23</span></td>
-                <td><span class="type-badge type-memo">Development Memo</span></td>
+                <td><span class="type-display">REVIEW</span></td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn" title="View transcript" aria-label="View transcript for PF-2024-003">
-                      📄
-                    </button>
-                    <button class="action-btn delete" title="Delete recording" aria-label="Delete recording PF-2024-003">
-                      🗑️
-                    </button>
+                    <button class="btn-icon" title="Preview" aria-label="Preview recording">View</button>
+                    <button class="btn-icon" title="Export" aria-label="Export recording">Export</button>
+                    <button class="btn-icon btn-danger" title="Delete" aria-label="Delete recording">Delete</button>
                   </div>
                 </td>
               </tr>
               
-              <tr data-entry-id="PF-2024-004" tabindex="0" role="button" aria-label="Open recording PF-2024-004">
-                <td><span class="entry-id">PF-2024-004</span></td>
-                <td><span class="student-name">Jordan Williams</span></td>
+              <tr data-entry-id="PF004" tabindex="0" role="button" aria-label="Open recording PF004">
+                <td><span class="entry-id">PF004</span></td>
+                <td><span class="student-name editable">Jordan</span></td>
                 <td><span class="entry-label editable">Science Lab Reflection</span></td>
-                <td><span class="date-time">Jan 11, 2024<br>1:20 PM</span></td>
+                <td><span class="date-time">2024-01-11</span></td>
+                <td><span class="date-time">13:20</span></td>
                 <td><span class="duration">4:07</span></td>
-                <td><span class="type-badge type-assessment">Assessment</span></td>
+                <td><span class="type-display">ASSESSMENT</span></td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn" title="View transcript" aria-label="View transcript for PF-2024-004">
-                      📄
-                    </button>
-                    <button class="action-btn delete" title="Delete recording" aria-label="Delete recording PF-2024-004">
-                      🗑️
-                    </button>
+                    <button class="btn-icon" title="Preview" aria-label="Preview recording">View</button>
+                    <button class="btn-icon" title="Export" aria-label="Export recording">Export</button>
+                    <button class="btn-icon btn-danger" title="Delete" aria-label="Delete recording">Delete</button>
                   </div>
                 </td>
               </tr>
               
-              <tr data-entry-id="PF-2024-005" tabindex="0" role="button" aria-label="Open recording PF-2024-005">
-                <td><span class="entry-id">PF-2024-005</span></td>
-                <td><span class="student-name"></span></td>
+              <tr data-entry-id="PF005" tabindex="0" role="button" aria-label="Open recording PF005">
+                <td><span class="entry-id">PF005</span></td>
+                <td><span class="student-name editable"></span></td>
                 <td><span class="entry-label editable">Class Discussion Summary</span></td>
-                <td><span class="date-time">Jan 10, 2024<br>11:30 AM</span></td>
+                <td><span class="date-time">2024-01-10</span></td>
+                <td><span class="date-time">11:30</span></td>
                 <td><span class="duration">6:15</span></td>
-                <td><span class="type-badge type-note">Short-Cycle Note</span></td>
+                <td><span class="type-display">NOTE</span></td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn" title="View transcript" aria-label="View transcript for PF-2024-005">
-                      📄
-                    </button>
-                    <button class="action-btn delete" title="Delete recording" aria-label="Delete recording PF-2024-005">
-                      🗑️
-                    </button>
+                    <button class="btn-icon" title="Preview" aria-label="Preview recording">View</button>
+                    <button class="btn-icon" title="Export" aria-label="Export recording">Export</button>
+                    <button class="btn-icon btn-danger" title="Delete" aria-label="Delete recording">Delete</button>
                   </div>
                 </td>
               </tr>
@@ -546,7 +461,7 @@
       const tableRows = document.querySelectorAll('tbody tr[data-entry-id]');
       tableRows.forEach(row => {
         row.addEventListener('click', function(e) {
-          if (e.target.closest('.action-btn')) return; // Don't trigger on action buttons
+          if (e.target.closest('.btn-icon')) return; // Don't trigger on action buttons
           const entryId = this.dataset.entryId;
           console.log('Opening detailed view for:', entryId);
           // Here you would navigate to the detailed view
@@ -560,30 +475,10 @@
         });
       });
       
-      // Sort functionality
-      const sortHeaders = document.querySelectorAll('th[data-sort]');
-      sortHeaders.forEach(header => {
-        header.addEventListener('click', function() {
-          const sortBy = this.dataset.sort;
-          console.log('Sorting by:', sortBy);
-          // Here you would implement actual sorting logic
-        });
-      });
-      
-      // Density controls
-      const densityBtns = document.querySelectorAll('.density-btn');
-      densityBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          densityBtns.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          const density = this.dataset.density;
-          console.log('Changing density to:', density);
-          // Here you would apply density changes
-        });
-      });
+      // Removed legacy sort and density controls listeners
       
       // Delete confirmation
-      const deleteButtons = document.querySelectorAll('.action-btn.delete');
+      const deleteButtons = document.querySelectorAll('.btn-icon.btn-danger');
       deleteButtons.forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
@@ -604,12 +499,13 @@
         // Here you would implement actual search filtering
       });
       
-      // Filter functionality
-      const filters = document.querySelectorAll('#type-filter, #date-filter');
-      filters.forEach(filter => {
-        filter.addEventListener('change', function() {
-          console.log('Filter changed:', this.id, this.value);
-          // Here you would implement actual filtering
+      // Editable name fields
+      const editableNames = document.querySelectorAll('.student-name.editable');
+      editableNames.forEach(name => {
+        name.addEventListener('click', function(e) {
+          e.stopPropagation();
+          // Here you would implement inline editing
+          console.log('Editing name field');
         });
       });
     });
