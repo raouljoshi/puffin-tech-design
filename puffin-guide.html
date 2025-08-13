@@ -34,6 +34,7 @@
         <a href="#colors" class="nav-link">Colors</a>
         <a href="#typography" class="nav-link">Typography</a>
         <a href="#components" class="nav-link">Components</a>
+        <a href="#tables-toolbars" class="nav-link">Tables & Toolbars</a>
         <a href="#navigation" class="nav-link">Navigation & Headers</a>
         <a href="#examples" class="nav-link">Page Examples</a>
         <a href="#forms" class="nav-link">Forms</a>
@@ -150,6 +151,127 @@
             </div>
             <pre class="code"><code>&lt;div class="toast" id="demoToast" role="status" aria-live="polite"&gt;Saved successfully&lt;/div&gt;</code></pre>
             <button class="btn btn-outline-primary copy-code" data-target="previous">Copy</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="tables-toolbars" class="section">
+        <h2>Tables & Toolbars</h2>
+        <p class="lede">Patterns for data views: page header actions, slim utility toolbars, compact row actions, and entry ID styling.</p>
+
+        <div class="component-showcase">
+          <!-- Page Header with Action -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <div class="container page-header">
+                <h3 style="margin:0;">My Items</h3>
+                <button class="btn btn-outline-primary">New item</button>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Page header with right-aligned action</h4>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;div class="container page-header"&gt;
+  &lt;h3&gt;My Items&lt;/h3&gt;
+  &lt;button class="btn btn-outline-primary"&gt;New item&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <!-- Toolbar with Filter Field -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <div class="container">
+                <div class="table-toolbar">
+                  <div class="filters-grid">
+                    <div class="input-group">
+                      <span class="prefix" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+                      </span>
+                      <input type="text" class="input-sm" placeholder="Filter by name, label, date..." aria-label="Filter items" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Slim table toolbar with filter</h4>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;div class="table-toolbar"&gt;
+  &lt;div class="filters-grid"&gt;
+    &lt;div class="input-group"&gt;
+      &lt;span class="prefix" aria-hidden="true"&gt;...funnel svg...&lt;/span&gt;
+      &lt;input type="text" class="input-sm" placeholder="Filter..." /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <!-- Data Table with Compact Row Actions -->
+          <div class="example-frame">
+            <div class="example-preview">
+              <div style="overflow:auto;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th style="width: 80px;">ID</th>
+                      <th style="width: 160px;">Name</th>
+                      <th>Label</th>
+                      <th style="width: 120px;">Type</th>
+                      <th style="width: 160px;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="entry-id">PF001</span></td>
+                      <td>Avery</td>
+                      <td>Math Assessment</td>
+                      <td><span class="text-mono">ASSESSMENT</span></td>
+                      <td>
+                        <div class="stack" style="gap:0.25rem;">
+                          <button class="btn-icon">View</button>
+                          <button class="btn-icon">Export</button>
+                          <button class="btn-icon btn-danger">Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><span class="entry-id">PF002</span></td>
+                      <td>Jordan</td>
+                      <td>Reading Check</td>
+                      <td><span class="text-mono">NOTE</span></td>
+                      <td>
+                        <div class="stack" style="gap:0.25rem;">
+                          <button class="btn-icon">View</button>
+                          <button class="btn-icon">Export</button>
+                          <button class="btn-icon btn-danger">Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="example-meta">
+              <h4>Compact row actions and entry-id helpers</h4>
+              <button class="btn btn-outline-primary copy-code" data-target="next">Copy HTML</button>
+            </div>
+            <pre class="code example-code"><code>&lt;table class="table"&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;span class="entry-id"&gt;PF001&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;Avery&lt;/td&gt;
+      &lt;td&gt;Math Assessment&lt;/td&gt;
+      &lt;td&gt;&lt;span class="text-mono"&gt;ASSESSMENT&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;button class="btn-icon"&gt;View&lt;/button&gt;
+        &lt;button class="btn-icon"&gt;Export&lt;/button&gt;
+        &lt;button class="btn-icon btn-danger"&gt;Delete&lt;/button&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
           </div>
         </div>
       </section>
