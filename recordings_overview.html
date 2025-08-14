@@ -512,7 +512,7 @@
   </script>
 
   <script>
-    // Navigate to appropriate page when clicking rows of Type REVIEW or ASSESSMENT
+    // Navigate to appropriate page when clicking rows of Type REVIEW, ASSESSMENT, or NOTE
     (function() {
       const rows = document.querySelectorAll('.recordings-table tbody tr');
       rows.forEach((row) => {
@@ -526,6 +526,8 @@
           targetPage = 'type_review.html';
         } else if (type === 'ASSESSMENT') {
           targetPage = 'type_assessment.html';
+        } else if (type === 'NOTE') {
+          targetPage = 'type_note.html';
         }
         
         if (targetPage) {

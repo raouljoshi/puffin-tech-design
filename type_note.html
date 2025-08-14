@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Type Review | Puffin</title>
+  <meta name="theme-color" content="#1F4E79" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="guide.css" />
+  <!-- jsPDF for export (UMD) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+  <style>
+    /* Workspace layout (left control panel + right stacked sections) */
+    .memo-workspace-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
+      align-items: start;
+      min-height: 100vh;
+    }
+    
+    .right-sections {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (max-width: 1200px) {
+      .memo-workspace-layout { grid-template-columns: 280px 1fr; }
+      .right-content { padding: 1rem; gap: 1rem; }
+    }
+    @media (max-width: 980px) {
+      .memo-workspace-layout { grid-template-columns: 1fr; }
+      .left-control-pane { min-height: auto; }
+      .workspace-panel { position: relative; }
+    }
+
+    .workspace-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 120px);
+    }
+    
+    /* Left pane styling */
+    .left-control-pane {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+    /* Sticky topbar for Back action */
+    .pane-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    
+    .pane-section {
+      padding: 1.5rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .pane-section:last-child {
+      border-bottom: none;
+      flex: 1;
+    }
+    
+    .pane-section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--foreground);
+      margin: 0 0 0.75rem 0;
+      /* no underline under headings per requirement */
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+    /* Title + inline actions row inside sections */
+    .pane-section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0;
+      border-bottom: 0; /* remove subtle line under Transcription */
+    }
+    
+    .right-content {
+      padding: 1.5rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(31,78,121,0.04);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    
+    .panel-header h2, .panel-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .panel-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .panel-sub-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.45rem 0.9rem; /* compact */
+      border-bottom: 1px solid var(--border);
+      background: var(--background);
+      position: sticky; /* toolbar stays under header */
+      top: 44px; /* approx header height */
+      z-index: 1;
+    }
+    .panel-content { padding: 0.9rem; flex: 1; overflow: auto; }
+
+    .property-section + .property-section { margin-top: 1rem; }
+    .section-title { font-size: 1rem; margin-bottom: 0.5rem; }
+
+    .editor-tools { display: flex; gap: 0.5rem; align-items: center; }
+    .btn-icon { padding: 0.35rem 0.5rem; border: 1px solid var(--border); background: transparent; border-radius: 0.4rem; cursor: pointer; }
+    .btn-icon:hover { background: rgba(31,78,121,0.06); }
+    /* compact button variant, local to this page */
+    .btn.btn-sm, .btn-sm { padding: 0.35rem 0.6rem; font-size: 0.9rem; border-radius: 0.4rem; }
+
+    .memo-editor { 
+      min-height: 360px; 
+      resize: vertical;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    .memo-editor-container { display: grid; gap: 0.5rem; }
+
+    /* Subject notes table styling */
+    .subjects-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+    }
+    
+    .subjects-table th {
+      background: rgba(31,78,121,0.06);
+      color: var(--foreground);
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+    
+    .subjects-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    
+    .subject-preview-cell {
+      max-width: 300px;
+    }
+    
+    .subject-preview {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2; /* Standard property for compatibility */
+      -webkit-box-orient: vertical;
+    }
+    
+    .subject-preview.empty {
+      font-style: italic;
+      color: var(--muted-foreground);
+    }
+    
+    .word-count-cell {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--muted);
+      width: 80px;
+    }
+    
+    .subject-row {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    
+    .subject-row:hover {
+      background: rgba(31,78,121,0.02);
+    }
+    
+    .subject-row.expanded {
+      background: rgba(31,78,121,0.04);
+    }
+    
+    .subject-name {
+      font-weight: 500;
+      color: var(--foreground);
+    }
+    
+    .subject-expand-cell {
+      width: 40px;
+      text-align: center;
+    }
+    
+    .expand-icon {
+      display: inline-block;
+      transition: transform 0.2s ease;
+      color: var(--muted);
+    }
+    
+    .subject-row.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+    .subject-expand-cell,
+    .expand-icon {
+      cursor: pointer;
+    }
+    .expand-icon {
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    
+    .subject-notes-row {
+      display: none;
+    }
+    
+    .subject-row.expanded + .subject-notes-row {
+      display: table-row;
+    }
+    
+    .subject-notes-cell {
+      padding: 1rem !important;
+      background: var(--background);
+    }
+    
+    .subject-textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    
+    .subject-meta {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 0.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Simple modal scaffold compatible with script.js */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal-backdrop[aria-hidden="true"] { display: none; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      width: min(720px, 92vw);
+      max-height: 80vh;
+      overflow: auto;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.75rem; }
+
+    /* Minor helpers */
+    .editor-stats { display: flex; gap: 0.75rem; color: var(--muted); font-size: 0.9rem; }
+    .word-count-only { display: flex; gap: 0.75rem; color: var(--muted); font-size: 0.9rem; }
+    .audio-controls { margin: 0.5rem 0; }
+    .metadata-list { display: grid; gap: 0.25rem; }
+    .metadata-item { display: grid; grid-template-columns: 90px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.95rem; }
+    .metadata-item dt { font-weight: 500; color: var(--muted); }
+    .metadata-item dd { margin: 0; }
+    
+    /* Subject notes table expansion */
+    .subject-notes-row {
+      display: none;
+    }
+    .subject-row.expanded + .subject-notes-row {
+      display: table-row;
+    }
+    .subject-row.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+
+    /* Compact inputs in the config form to match dense layout */
+    .config-form .form-input,
+    .config-form .form-select {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.95rem;
+    }
+    .config-form .form-label { font-size: 0.9rem; }
+    
+    /* Accent styling for internal note */
+    .internal-note {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-50, color-mix(in srgb, var(--accent) 6%, transparent));
+    }
+    .internal-note .panel-header { 
+      background: var(--accent-50, color-mix(in srgb, var(--accent) 8%, transparent)); 
+    }
+    .internal-note .panel-sub-header { 
+      background: var(--accent-50, color-mix(in srgb, var(--accent) 8%, transparent)); 
+    }
+    .internal-note .memo-editor { 
+      border-color: var(--accent); 
+      background: var(--accent-50, color-mix(in srgb, var(--accent) 6%, transparent)); 
+    }
+    
+    /* Transcription actions */
+    .transcription-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .info-grid {
+      display: grid;
+      gap: 0.25rem; /* tighter spacing between rows */
+    }
+    
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.25rem 0; /* reduce spacing and remove row lines */
+      border-bottom: 0;
+    }
+    
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    .info-value {
+      color: var(--foreground);
+      font-size: 0.95rem;
+    }
+    /* Sticky footer for destructive action */
+    .pane-footer {
+      margin-top: auto;
+      position: sticky;
+      bottom: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem;
+    }
+    .pane-footer .alert-danger {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Removed global header for a focused, app-like workspace layout -->
+
+  <main id="main" class="memo-workspace-layout" data-locale="en-US" data-school-name="Sample School" data-huvudman="Sample District">
+    <!-- Left Panel: Full-height Control Pane -->
+    <aside class="left-control-pane" role="complementary" aria-label="Control Panel">
+      <div class="pane-topbar">
+        <h3 class="pane-section-title" style="margin:0;">Control Panel</h3>
+        <a class="btn btn-tertiary btn-sm" href="recordings_overview.html">Back</a>
+      </div>
+      <!-- Section 1: Control Panel -->
+      <section class="pane-section">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Recording</span>
+            <span class="info-value"><span id="recording-id" class="entry-id">PF003</span></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Date</span>
+            <span class="info-value"><time datetime="2025-08-01">Aug 1, 2025</time></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Duration</span>
+            <span class="info-value">00:10:23</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Language</span>
+            <span class="info-value">English</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Transcription -->
+      <section class="pane-section">
+        <div class="pane-section-head">
+          <h3 class="pane-section-title" style="margin:0;border:0;padding:0;">Transcription</h3>
+          <div class="transcription-actions">
+            <button type="button" class="btn btn-tertiary btn-sm" data-modal-target="transcription-modal" data-open-modal="#transcription-modal">View</button>
+            <button type="button" class="btn btn-tertiary btn-sm" title="Export transcription">Export</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Configuration -->
+      <section class="pane-section">
+        <h3 class="pane-section-title">Configuration</h3>
+        <form id="config-form" class="config-form" novalidate>
+          <div class="form-group">
+            <label for="child-name" class="form-label">Student Name</label>
+            <input id="child-name" name="childName" type="text" class="form-input" maxlength="100" autocomplete="given-name" />
+          </div>
+          <div class="form-group">
+            <label for="label" class="form-label">Label</label>
+            <input id="label" name="label" type="text" class="form-input" maxlength="120" placeholder="e.g., Parent meeting, Fall term" />
+          </div>
+          <div class="form-group">
+            <label for="grade-band" class="form-label">Grade Band</label>
+            <select id="grade-band" name="gradeBand" class="form-select">
+              <option value="0-4">0-4</option>
+              <option value="5-8">5-8</option>
+              <option value="9-12">9-12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="secondary-language" class="form-label">Secondary Language</label>
+            <select id="secondary-language" name="secondaryLanguage" class="form-select">
+              <option value="">No secondary language</option>
+              <option value="en-US">English (en-US)</option>
+              <option value="de-DE">German (de-DE)</option>
+              <option value="sv-SE">Swedish (sv-SE)</option>
+              <option value="ar">Arabic (ar)</option>
+              <option value="pl">Polish (pl)</option>
+              <option value="fi">Finnish (fi)</option>
+              <option value="no">Norwegian (no)</option>
+              <option value="da">Danish (da)</option>
+              <option value="is">Icelandic (is)</option>
+              <option value="fr">French (fr)</option>
+              <option value="es">Spanish (es)</option>
+              <option value="pt">Portuguese (pt)</option>
+              <option value="ko">Korean (ko)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-primary btn-sm" id="generate-memo">Generate</button>
+          </div>
+        </form>
+      </section>
+      <div class="pane-footer" role="region" aria-label="Danger zone">
+        <div class="alert alert-danger" role="alert">
+          <span>Delete transcription and notes</span>
+          <button type="button" class="btn btn-danger btn-sm" title="Delete transcription">Delete</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Side: Stacked Sections -->
+    <div class="right-content">
+      <section class="workspace-panel edit-panel">
+        <div class="panel-header">
+          <h2>Student-facing Note</h2>
+          <div class="panel-actions">
+            <button type="button" class="btn btn-tertiary btn-sm" id="export-student-note">Export</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="save-student-note">Save</button>
+          </div>
+        </div>
+        <div class="panel-sub-header">
+          <div class="sub-header-left">
+            <div class="editor-stats">
+              <span id="student-word-count">0 Words</span>
+              <span id="student-last-modified" style="display:none;"></span>
+            </div>
+          </div>
+          <div class="editor-tools">
+            <button type="button" class="btn-icon" id="student-format-bold" title="Bold"><strong>B</strong></button>
+            <button type="button" class="btn-icon" id="student-format-italic" title="Italic"><em>I</em></button>
+            <button type="button" class="btn-icon" id="student-insert-timestamp" title="Insert timestamp">🕒</button>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="memo-editor-container">
+            <textarea id="student-note-editor" class="memo-editor" placeholder="Write a note for the student..." spellcheck="true" data-recording-id="1"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Personal Note (Internal) -->
+      <section class="workspace-panel edit-panel internal-note" role="complementary" aria-label="Personal Note">
+        <div class="panel-header">
+          <h2>Personal Note (Internal)</h2>
+          <div class="panel-actions">
+            <button type="button" class="btn btn-tertiary btn-sm" id="export-personal-note">Export</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="save-personal-note">Save</button>
+          </div>
+        </div>
+        <div class="panel-sub-header">
+          <div class="sub-header-left">
+            <div class="editor-stats">
+              <span id="personal-word-count">0 Words</span>
+              <span id="personal-last-modified" style="display:none;"></span>
+            </div>
+          </div>
+          <div class="editor-tools">
+            <button type="button" class="btn-icon" id="personal-format-bold" title="Bold"><strong>B</strong></button>
+            <button type="button" class="btn-icon" id="personal-format-italic" title="Italic"><em>I</em></button>
+            <button type="button" class="btn-icon" id="personal-insert-timestamp" title="Insert timestamp">🕒</button>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="memo-editor-container">
+            <textarea id="personal-note-editor" class="memo-editor" placeholder="Write a personal/internal note..." spellcheck="true" data-recording-id="1"></textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Transcription Modal scaffold -->
+    <div id="transcription-modal" class="modal-backdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="transcription-title">
+        <div class="modal-header">
+          <h3 id="transcription-title" style="margin:0;">Transcription</h3>
+          <button class="btn btn-outline-primary" data-close-modal>Close</button>
+        </div>
+        <div class="modal-body">
+          <p>This is a placeholder transcription for the selected recording. In a full implementation, the transcript text would appear here with search and copy tools.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-close-modal>Close</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    // Populate Recording ID from URL (?id=PFxxx), fallback to existing text
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const idEl = document.getElementById('recording-id');
+      if (id && idEl) {
+        idEl.textContent = id;
+      }
+    })();
+
+    // Page-specific JS for memo workspace mock behaviors
+    document.addEventListener('DOMContentLoaded', function () {
+      const main = document.querySelector('main.memo-workspace-layout');
+      const saveConfigBtn = document.getElementById('save-config');
+      const configForm = document.getElementById('config-form');
+      
+      // Student note elements
+      const studentEditor = document.getElementById('student-note-editor');
+      const studentWordCount = document.getElementById('student-word-count');
+      const studentSaveBtn = document.getElementById('save-student-note');
+      const studentExportBtn = document.getElementById('export-student-note');
+      const studentLastModified = document.getElementById('student-last-modified');
+      const studentBold = document.getElementById('student-format-bold');
+      const studentItalic = document.getElementById('student-format-italic');
+      const studentTimestamp = document.getElementById('student-insert-timestamp');
+      
+      // Personal note elements
+      const personalEditor = document.getElementById('personal-note-editor');
+      const personalWordCount = document.getElementById('personal-word-count');
+      const personalSaveBtn = document.getElementById('save-personal-note');
+      const personalExportBtn = document.getElementById('export-personal-note');
+      const personalLastModified = document.getElementById('personal-last-modified');
+      const personalBold = document.getElementById('personal-format-bold');
+      const personalItalic = document.getElementById('personal-format-italic');
+      const personalTimestamp = document.getElementById('personal-insert-timestamp');
+
+      // Helper functions
+      function getWordCount(text) {
+        const t = (text || '').trim();
+        return t ? t.split(/\s+/).length : 0;
+      }
+      
+      function updateWordCount(editor, countEl) {
+        const words = getWordCount(editor.value);
+        countEl.textContent = `${words} Words`;
+      }
+      
+      function wrapSelection(editor, wrapper) {
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const selected = editor.value.slice(start, end);
+        const before = editor.value.slice(0, start);
+        const after = editor.value.slice(end);
+        editor.value = before + wrapper + selected + wrapper + after;
+        editor.focus();
+        editor.setSelectionRange(start + wrapper.length, end + wrapper.length);
+        updateWordCount(editor, editor === studentEditor ? studentWordCount : personalWordCount);
+      }
+      
+      function insertTimestampInEditor(editor) {
+        const ts = new Date().toLocaleString(main?.dataset?.locale || 'en-US');
+        const insert = `[${ts}]`;
+        const pos = editor.selectionStart;
+        editor.setRangeText(insert, pos, pos, 'end');
+        editor.focus();
+        updateWordCount(editor, editor === studentEditor ? studentWordCount : personalWordCount);
+      }
+      
+      function mockSave(saveBtn, lastModifiedEl) {
+        saveBtn.textContent = 'Saved';
+        const now = new Date().toLocaleString(main?.dataset?.locale || 'en-US');
+        if (lastModifiedEl) {
+          lastModifiedEl.style.display = 'inline';
+          lastModifiedEl.textContent = `Last modified: ${now}`;
+        }
+        setTimeout(() => (saveBtn.textContent = 'Save'), 1000);
+      }
+      
+      function exportNote(filename, content) {
+        const blob = new Blob([content || ''], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+      
+      // Initialize word counts
+      updateWordCount(studentEditor, studentWordCount);
+      updateWordCount(personalEditor, personalWordCount);
+      
+      // Student note event listeners
+      studentEditor.addEventListener('input', () => updateWordCount(studentEditor, studentWordCount));
+      studentBold.addEventListener('click', () => wrapSelection(studentEditor, '**'));
+      studentItalic.addEventListener('click', () => wrapSelection(studentEditor, '*'));
+      studentTimestamp.addEventListener('click', () => insertTimestampInEditor(studentEditor));
+      studentSaveBtn.addEventListener('click', () => mockSave(studentSaveBtn, studentLastModified));
+      studentExportBtn.addEventListener('click', () => exportNote('student_note.txt', studentEditor.value));
+      
+      // Personal note event listeners
+      personalEditor.addEventListener('input', () => updateWordCount(personalEditor, personalWordCount));
+      personalBold.addEventListener('click', () => wrapSelection(personalEditor, '**'));
+      personalItalic.addEventListener('click', () => wrapSelection(personalEditor, '*'));
+      personalTimestamp.addEventListener('click', () => insertTimestampInEditor(personalEditor));
+      personalSaveBtn.addEventListener('click', () => mockSave(personalSaveBtn, personalLastModified));
+      personalExportBtn.addEventListener('click', () => exportNote('personal_note.txt', personalEditor.value));
+
+
+
+      // Config save (mock)
+      saveConfigBtn.addEventListener('click', () => {
+        const payload = {
+          childName: configForm.childName.value || '',
+          label: configForm.label.value || '',
+          gradeBand: configForm.gradeBand.value || '',
+          secondaryLanguage: configForm.secondaryLanguage.value || ''
+        };
+        console.log('Mock save configuration', payload);
+        saveConfigBtn.textContent = 'Saved';
+        setTimeout(() => (saveConfigBtn.textContent = 'Save'), 900);
+      });
+
+
+    });
+  </script>
+</body>
+</html>
