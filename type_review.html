@@ -239,6 +239,14 @@
     .subject-row.expanded .expand-icon {
       transform: rotate(90deg);
     }
+    .subject-expand-cell,
+    .expand-icon {
+      cursor: pointer;
+    }
+    .expand-icon {
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
     
     .subject-notes-row {
       display: none;
@@ -300,6 +308,17 @@
     .metadata-item { display: grid; grid-template-columns: 90px 1fr; gap: 0.5rem; align-items: baseline; font-size: 0.95rem; }
     .metadata-item dt { font-weight: 500; color: var(--muted); }
     .metadata-item dd { margin: 0; }
+    
+    /* Subject notes table expansion */
+    .subject-notes-row {
+      display: none;
+    }
+    .subject-row.expanded + .subject-notes-row {
+      display: table-row;
+    }
+    .subject-row.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
 
     /* Compact inputs in the config form to match dense layout */
     .config-form .form-input,
@@ -512,7 +531,7 @@
                     <span class="subject-name">Arts and Crafts</span>
                   </td>
                   <td class="subject-preview-cell">
-                    <div class="subject-preview empty" id="preview-artsAndCraft">No notes yet...</div>
+                    <div class="subject-preview empty" id="preview-artsAndCraft"></div>
                   </td>
                   <td class="word-count-cell">
                     <span class="word-count" data-target="subject-artsAndCraft">0 words</span>
@@ -532,7 +551,7 @@
                     <span class="subject-name">Mathematics</span>
                   </td>
                   <td class="subject-preview-cell">
-                    <div class="subject-preview empty" id="preview-math">No notes yet...</div>
+                    <div class="subject-preview empty" id="preview-math"></div>
                   </td>
                   <td class="word-count-cell">
                     <span class="word-count" data-target="subject-math">0 words</span>
@@ -552,7 +571,7 @@
                     <span class="subject-name">Language</span>
                   </td>
                   <td class="subject-preview-cell">
-                    <div class="subject-preview empty" id="preview-language">No notes yet...</div>
+                    <div class="subject-preview empty" id="preview-language"></div>
                   </td>
                   <td class="word-count-cell">
                     <span class="word-count" data-target="subject-language">0 words</span>
@@ -765,10 +784,10 @@
         const previewEl = document.getElementById(`preview-${subject}`);
         if (previewEl) {
           if (text.trim()) {
-            previewEl.textContent = text.trim();
+            previewEl.textContent = text.trim().length > 50 ? text.trim().substring(0, 50) + '...' : text.trim();
             previewEl.className = 'subject-preview';
           } else {
-            previewEl.textContent = 'No notes yet...';
+            previewEl.textContent = '';
             previewEl.className = 'subject-preview empty';
           }
         }
@@ -780,13 +799,41 @@
         ta.addEventListener('input', () => updateSubjectCount(ta));
       });
       
-      // Handle row expansion/collapse
+      // Handle row expansion/collapse (click only on expand cell/icon)
       if (subjectsTable) {
-        subjectsTable.addEventListener('click', (e) => {
-          const row = e.target.closest('.subject-row');
+        // Make expand icons focusable and button-like
+        document.querySelectorAll('.subject-expand-cell .expand-icon').forEach((icon) => {
+          icon.setAttribute('role', 'button');
+          icon.setAttribute('tabindex', '0');
+          icon.setAttribute('aria-expanded', 'false');
+        });
+
+        function toggleRow(row) {
           if (!row) return;
-          
-          row.classList.toggle('expanded');
+          const notesRow = row.nextElementSibling;
+          const isExpanded = row.classList.toggle('expanded');
+          if (notesRow && notesRow.classList.contains('subject-notes-row')) {
+            notesRow.style.display = isExpanded ? 'table-row' : 'none';
+          }
+          const icon = row.querySelector('.expand-icon');
+          if (icon) icon.setAttribute('aria-expanded', String(isExpanded));
+        }
+
+        subjectsTable.addEventListener('click', (e) => {
+          const expandTarget = e.target.closest('.subject-expand-cell, .expand-icon');
+          if (!expandTarget) return;
+          const row = expandTarget.closest('.subject-row');
+          toggleRow(row);
+        });
+
+        // Keyboard support: Enter/Space on expand icon
+        subjectsTable.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          const icon = e.target.closest('.expand-icon');
+          if (!icon) return;
+          e.preventDefault();
+          const row = icon.closest('.subject-row');
+          toggleRow(row);
         });
       }
       
