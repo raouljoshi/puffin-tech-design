@@ -512,7 +512,7 @@
   </script>
 
   <script>
-    // Navigate to type_review.html when clicking rows of Type REVIEW
+    // Navigate to appropriate page when clicking rows of Type REVIEW or ASSESSMENT
     (function() {
       const rows = document.querySelectorAll('.recordings-table tbody tr');
       rows.forEach((row) => {
@@ -521,8 +521,15 @@
         if (!typeEl || !idEl) return;
         const type = typeEl.textContent.trim().toUpperCase();
         const id = idEl.textContent.trim();
+        let targetPage = null;
         if (type === 'REVIEW') {
-          const go = () => { window.location.href = `type_review.html?id=${encodeURIComponent(id)}`; };
+          targetPage = 'type_review.html';
+        } else if (type === 'ASSESSMENT') {
+          targetPage = 'type_assessment.html';
+        }
+        
+        if (targetPage) {
+          const go = () => { window.location.href = `${targetPage}?id=${encodeURIComponent(id)}`; };
           row.addEventListener('click', go);
           row.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
